@@ -66,7 +66,8 @@ public class RedissonProperties {
         SINGLE, CLUSTER, SENTINEL, MASTERSLAVE
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class Single {
         private String address = "redis://127.0.0.1:6379";
         private Long scanInterval = 1000L;
@@ -79,7 +80,8 @@ public class RedissonProperties {
         private Long dnsMonitoringInterval = 5000L;
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class Cluster {
         private LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
         private Integer slaveSubscriptionConnectionMinimumIdleSize = 1;
@@ -93,7 +95,8 @@ public class RedissonProperties {
         private Integer scanInterval = 1000;
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class Sentinel {
         private String masterName = "mymaster";
         private String[] sentinelAddresses;
@@ -110,7 +113,8 @@ public class RedissonProperties {
         private Integer database = 0;
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class MasterSlave {
         private LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
         private Integer slaveSubscriptionConnectionMinimumIdleSize = 1;
