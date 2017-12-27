@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.drtrang</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.4</version>
+    </parent>
+
+    <artifactId>redisson-spring-boot</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>Redisson Spring Boot Starter</name>
+    <description>Spring Boot Starter for Redisson.</description>
+    <url>https://github.com/drtrang/redisson-spring-boot</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://github.com/drtrang/redisson-spring-boot/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>trang</name>
+            <email>donghao.l@hotmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/drtrang/redisson-spring-boot.git</url>
+        <connection>scm:git:https://github.com/drtrang/redisson-spring-boot.git</connection>
+        <developerConnection>scm:git:https://github.com/drtrang</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <modules>
+        <module>redisson-spring-boot-autoconfigure</module>
+        <module>redisson-spring-boot-starter</module>
+    </modules>
+
+</project>

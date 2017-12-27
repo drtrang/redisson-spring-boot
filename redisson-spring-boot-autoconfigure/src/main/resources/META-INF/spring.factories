@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.github.trang.redisson.autoconfigure.RedissonAutoConfiguration,\
+  com.github.trang.redisson.autoconfigure.RedissonCacheManagerAutoConfiguration,\
+  com.github.trang.redisson.autoconfigure.CompositeCacheManagerAutoConfiguration
