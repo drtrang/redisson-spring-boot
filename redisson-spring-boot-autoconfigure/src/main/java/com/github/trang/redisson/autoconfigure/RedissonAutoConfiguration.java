@@ -1,9 +1,6 @@
 package com.github.trang.redisson.autoconfigure;
 
-import com.github.trang.redisson.autoconfigure.RedissonProperties.Cluster;
-import com.github.trang.redisson.autoconfigure.RedissonProperties.MasterSlave;
-import com.github.trang.redisson.autoconfigure.RedissonProperties.Sentinel;
-import com.github.trang.redisson.autoconfigure.RedissonProperties.Single;
+import com.github.trang.redisson.autoconfigure.RedissonProperties.*;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -49,11 +46,14 @@ public class RedissonAutoConfiguration {
             case CLUSTER:
                 configCluster(config);
                 break;
+            case MASTER_SLAVE:
+                configMasterSlave(config);
+                break;
             case SENTINEL:
                 configSentinel(config);
                 break;
-            case MASTERSLAVE:
-                configMasterSlave(config);
+            case REPLICATED:
+                configReplicated(config);
                 break;
             default:
                 throw new IllegalArgumentException("illegal parameter: " + redissonProperties.getType());
@@ -76,60 +76,197 @@ public class RedissonAutoConfiguration {
     }
 
     private void configSingle(Config config) {
-        Single properties = redissonProperties.getSingle();
+        SingleServerConfig properties = redissonProperties.getSingle();
         config.useSingleServer()
+                // BaseConfig
+                .setPassword(properties.getPassword())
+                .setSubscriptionsPerConnection(properties.getSubscriptionsPerConnection())
+                .setRetryAttempts(properties.getRetryAttempts())
+                .setRetryInterval(properties.getRetryInterval())
+                .setTimeout(properties.getTimeout())
+                .setClientName(properties.getClientName())
+                .setPingTimeout(properties.getPingTimeout())
+                .setConnectTimeout(properties.getConnectTimeout())
+                .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
+                .setFailedAttempts(properties.getFailedAttempts())
+                .setReconnectionTimeout(properties.getReconnectionTimeout())
+                .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
+                .setSslProvider(properties.getSslProvider())
+                .setSslTruststore(properties.getSslTruststore())
+                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslKeystore(properties.getSslKeystore())
+                .setSslKeystorePassword(properties.getSslKeystorePassword())
+                .setPingConnectionInterval(properties.getPingConnectionInterval())
+                .setKeepAlive(properties.isKeepAlive())
+                .setTcpNoDelay(properties.isTcpNoDelay())
+                // SingleServerConfig
                 .setAddress(properties.getAddress())
                 .setDatabase(properties.getDatabase())
                 .setConnectionMinimumIdleSize(properties.getConnectionMinimumIdleSize())
                 .setConnectionPoolSize(properties.getConnectionPoolSize())
                 .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
-                .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize());
+                .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setDnsMonitoring(properties.isDnsMonitoring())
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
     }
 
     private void configCluster(Config config) {
-        Cluster properties = redissonProperties.getCluster();
+        ClusterServersConfig properties = redissonProperties.getCluster();
         config.useClusterServers()
+                // BaseConfig
+                .setPassword(properties.getPassword())
+                .setSubscriptionsPerConnection(properties.getSubscriptionsPerConnection())
+                .setRetryAttempts(properties.getRetryAttempts())
+                .setRetryInterval(properties.getRetryInterval())
+                .setTimeout(properties.getTimeout())
+                .setClientName(properties.getClientName())
+                .setPingTimeout(properties.getPingTimeout())
+                .setConnectTimeout(properties.getConnectTimeout())
+                .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
+                .setFailedAttempts(properties.getFailedAttempts())
+                .setReconnectionTimeout(properties.getReconnectionTimeout())
+                .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
+                .setSslProvider(properties.getSslProvider())
+                .setSslTruststore(properties.getSslTruststore())
+                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslKeystore(properties.getSslKeystore())
+                .setSslKeystorePassword(properties.getSslKeystorePassword())
+                .setPingConnectionInterval(properties.getPingConnectionInterval())
+                .setKeepAlive(properties.isKeepAlive())
+                .setTcpNoDelay(properties.isTcpNoDelay())
+                // ClusterServersConfig
                 .addNodeAddress(properties.getNodeAddresses())
-                .setReadMode(properties.getReadMode())
                 .setScanInterval(properties.getScanInterval())
                 .setLoadBalancer(properties.getLoadBalancer())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
                 .setSlaveConnectionMinimumIdleSize(properties.getSlaveConnectionMinimumIdleSize())
                 .setSlaveConnectionPoolSize(properties.getSlaveConnectionPoolSize())
-                .setSubscriptionConnectionMinimumIdleSize(properties.getSlaveSubscriptionConnectionMinimumIdleSize())
-                .setSubscriptionConnectionPoolSize(properties.getSlaveSubscriptionConnectionPoolSize());
+                .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setReadMode(properties.getReadMode())
+                .setSubscriptionMode(properties.getSubscriptionMode())
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
     }
 
     private void configMasterSlave(Config config) {
-        MasterSlave properties = redissonProperties.getMasterSlave();
+        MasterSlaveServersConfig properties = redissonProperties.getMasterSlave();
         config.useMasterSlaveServers()
+                // BaseConfig
+                .setPassword(properties.getPassword())
+                .setSubscriptionsPerConnection(properties.getSubscriptionsPerConnection())
+                .setRetryAttempts(properties.getRetryAttempts())
+                .setRetryInterval(properties.getRetryInterval())
+                .setTimeout(properties.getTimeout())
+                .setClientName(properties.getClientName())
+                .setPingTimeout(properties.getPingTimeout())
+                .setConnectTimeout(properties.getConnectTimeout())
+                .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
+                .setFailedAttempts(properties.getFailedAttempts())
+                .setReconnectionTimeout(properties.getReconnectionTimeout())
+                .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
+                .setSslProvider(properties.getSslProvider())
+                .setSslTruststore(properties.getSslTruststore())
+                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslKeystore(properties.getSslKeystore())
+                .setSslKeystorePassword(properties.getSslKeystorePassword())
+                .setPingConnectionInterval(properties.getPingConnectionInterval())
+                .setKeepAlive(properties.isKeepAlive())
+                .setTcpNoDelay(properties.isTcpNoDelay())
+                // MasterSlaveServersConfig
                 .setMasterAddress(properties.getMasterAddress())
                 .addSlaveAddress(properties.getSlaveAddresses())
                 .setDatabase(properties.getDatabase())
-                .setReadMode(properties.getReadMode())
-                .setLoadBalancer(properties.getLoadBalancer())
-                .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
-                .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
-                .setSubscriptionConnectionMinimumIdleSize(properties.getSlaveSubscriptionConnectionMinimumIdleSize())
-                .setSubscriptionConnectionPoolSize(properties.getSlaveSubscriptionConnectionPoolSize());
-    }
-
-    private void configSentinel(Config config) {
-        Sentinel properties = redissonProperties.getSentinel();
-        config.useSentinelServers()
-                .setMasterName(properties.getMasterName())
-                .addSentinelAddress(properties.getSentinelAddresses())
-                .setReadMode(properties.getReadMode())
-                .setDatabase(properties.getDatabase())
-                .setSubscriptionMode(properties.getSubscriptionMode())
                 .setLoadBalancer(properties.getLoadBalancer())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
                 .setSlaveConnectionMinimumIdleSize(properties.getSlaveConnectionMinimumIdleSize())
                 .setSlaveConnectionPoolSize(properties.getSlaveConnectionPoolSize())
-                .setSubscriptionConnectionMinimumIdleSize(properties.getSlaveSubscriptionConnectionMinimumIdleSize())
-                .setSubscriptionConnectionPoolSize(properties.getSlaveSubscriptionConnectionPoolSize());
+                .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setReadMode(properties.getReadMode())
+                .setSubscriptionMode(properties.getSubscriptionMode())
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
+    }
+
+    private void configSentinel(Config config) {
+        SentinelServersConfig properties = redissonProperties.getSentinel();
+        config.useSentinelServers()
+                // BaseConfig
+                .setPassword(properties.getPassword())
+                .setSubscriptionsPerConnection(properties.getSubscriptionsPerConnection())
+                .setRetryAttempts(properties.getRetryAttempts())
+                .setRetryInterval(properties.getRetryInterval())
+                .setTimeout(properties.getTimeout())
+                .setClientName(properties.getClientName())
+                .setPingTimeout(properties.getPingTimeout())
+                .setConnectTimeout(properties.getConnectTimeout())
+                .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
+                .setFailedAttempts(properties.getFailedAttempts())
+                .setReconnectionTimeout(properties.getReconnectionTimeout())
+                .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
+                .setSslProvider(properties.getSslProvider())
+                .setSslTruststore(properties.getSslTruststore())
+                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslKeystore(properties.getSslKeystore())
+                .setSslKeystorePassword(properties.getSslKeystorePassword())
+                .setPingConnectionInterval(properties.getPingConnectionInterval())
+                .setKeepAlive(properties.isKeepAlive())
+                .setTcpNoDelay(properties.isTcpNoDelay())
+                // SentinelServersConfig
+                .addSentinelAddress(properties.getSentinelAddresses())
+                .setMasterName(properties.getMasterName())
+                .setDatabase(properties.getDatabase())
+                .setLoadBalancer(properties.getLoadBalancer())
+                .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
+                .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
+                .setSlaveConnectionMinimumIdleSize(properties.getSlaveConnectionMinimumIdleSize())
+                .setSlaveConnectionPoolSize(properties.getSlaveConnectionPoolSize())
+                .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setReadMode(properties.getReadMode())
+                .setSubscriptionMode(properties.getSubscriptionMode())
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
+    }
+
+    private void configReplicated(Config config) {
+        ReplicatedServersConfig properties = redissonProperties.getReplicated();
+        config.useReplicatedServers()
+                // BaseConfig
+                .setPassword(properties.getPassword())
+                .setSubscriptionsPerConnection(properties.getSubscriptionsPerConnection())
+                .setRetryAttempts(properties.getRetryAttempts())
+                .setRetryInterval(properties.getRetryInterval())
+                .setTimeout(properties.getTimeout())
+                .setClientName(properties.getClientName())
+                .setPingTimeout(properties.getPingTimeout())
+                .setConnectTimeout(properties.getConnectTimeout())
+                .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
+                .setFailedAttempts(properties.getFailedAttempts())
+                .setReconnectionTimeout(properties.getReconnectionTimeout())
+                .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
+                .setSslProvider(properties.getSslProvider())
+                .setSslTruststore(properties.getSslTruststore())
+                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslKeystore(properties.getSslKeystore())
+                .setSslKeystorePassword(properties.getSslKeystorePassword())
+                .setPingConnectionInterval(properties.getPingConnectionInterval())
+                .setKeepAlive(properties.isKeepAlive())
+                .setTcpNoDelay(properties.isTcpNoDelay())
+                // SentinelServersConfig
+                .addNodeAddress(properties.getNodeAddresses())
+                .setScanInterval(properties.getScanInterval())
+                .setDatabase(properties.getDatabase())
+                .setLoadBalancer(properties.getLoadBalancer())
+                .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
+                .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
+                .setSlaveConnectionMinimumIdleSize(properties.getSlaveConnectionMinimumIdleSize())
+                .setSlaveConnectionPoolSize(properties.getSlaveConnectionPoolSize())
+                .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setReadMode(properties.getReadMode())
+                .setSubscriptionMode(properties.getSubscriptionMode())
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
     }
 
 }
