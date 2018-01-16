@@ -49,7 +49,7 @@ public class RedissonCacheManagerAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public RedissonSpringCacheManager redissonCacheManager(RedissonClient redisson) {
-        log.info("------ 初始化 RedissonCacheManager ------");
+        log.info("redisson cache-manager init...");
         // 构造 ConfigMap
         Map<String, CacheConfig> config = new HashMap<>(cacheProperties.getConfigs());
         // 创建一个名称为 default 的缓存，过期时间为 2 小时，最长空闲时为 10 分钟。

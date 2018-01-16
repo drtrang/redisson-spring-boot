@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -27,11 +28,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class RedissonAutoConfiguration {
 
-    private final RedissonProperties redissonProperties;
-
-    public RedissonAutoConfiguration(RedissonProperties redissonProperties) {
-        this.redissonProperties = redissonProperties;
-    }
+    private RedissonProperties redissonProperties;
 
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingBean
@@ -69,10 +66,9 @@ public class RedissonAutoConfiguration {
                 .setKeepPubSubOrder(redissonProperties.isKeepPubSubOrder())
                 .setUseLinuxNativeEpoll(redissonProperties.isUseLinuxNativeEpoll())
                 .setEventLoopGroup(redissonProperties.getEventLoopGroup())
-                .setCodecProvider(redissonProperties.getCodecProvider())
-                .setResolverProvider(redissonProperties.getResolverProvider())
+                .setReferenceCodecProvider(redissonProperties.getReferenceCodecProvider())
                 .setLockWatchdogTimeout(redissonProperties.getLockWatchdogTimeout())
-                .setRedissonReferenceEnabled(redissonProperties.isRedissonReferenceEnabled());
+                .setReferenceEnabled(redissonProperties.isReferenceEnabled());
     }
 
     private void configSingle(Config config) {
@@ -267,6 +263,11 @@ public class RedissonAutoConfiguration {
                 .setReadMode(properties.getReadMode())
                 .setSubscriptionMode(properties.getSubscriptionMode())
                 .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
+    }
+
+    @Autowired
+    public void setRedissonProperties(RedissonProperties redissonProperties) {
+        this.redissonProperties = redissonProperties;
     }
 
 }

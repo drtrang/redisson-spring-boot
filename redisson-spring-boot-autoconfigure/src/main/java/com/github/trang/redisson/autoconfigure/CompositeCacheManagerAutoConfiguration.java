@@ -40,7 +40,7 @@ public class CompositeCacheManagerAutoConfiguration {
     @Bean
     @Primary
     public CompositeCacheManager cacheManager() {
-        log.info("------ 初始化 CompositeCacheManager ------");
+        log.info("composite cache-manager init...");
         CompositeCacheManager compositeCacheManager = new CompositeCacheManager();
         if (cacheManagers != null && !cacheManagers.isEmpty()) {
             compositeCacheManager.setCacheManagers(cacheManagers);

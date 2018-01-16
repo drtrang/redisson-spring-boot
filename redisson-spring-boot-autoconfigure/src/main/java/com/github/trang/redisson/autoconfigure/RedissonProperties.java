@@ -4,16 +4,14 @@ import io.netty.channel.EventLoopGroup;
 import lombok.Getter;
 import lombok.Setter;
 import org.redisson.client.codec.Codec;
-import org.redisson.codec.CodecProvider;
-import org.redisson.codec.DefaultCodecProvider;
+import org.redisson.codec.DefaultReferenceCodecProvider;
 import org.redisson.codec.JsonJacksonCodec;
+import org.redisson.codec.ReferenceCodecProvider;
 import org.redisson.config.ReadMode;
 import org.redisson.config.SslProvider;
 import org.redisson.config.SubscriptionMode;
 import org.redisson.connection.balancer.LoadBalancer;
 import org.redisson.connection.balancer.RoundRobinLoadBalancer;
-import org.redisson.liveobject.provider.DefaultResolverProvider;
-import org.redisson.liveobject.provider.ResolverProvider;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -36,14 +34,12 @@ public class RedissonProperties {
     private int nettyThreads = 0;
     /** Redis 进行序列化和反序列化的类型，默认值：JsonJacksonCodec */
     private Codec codec = new JsonJacksonCodec();
-    /** Codec 注册和获取功能的提供者，默认值：DefaultCodecProvider */
-    private CodecProvider codecProvider = new DefaultCodecProvider();
-    /** Resolver 注册和获取功能的提供者，默认值：DefaultResolverProvider */
-    private ResolverProvider resolverProvider = new DefaultResolverProvider();
+    /** Codec 注册和获取功能的提供者，默认值：DefaultReferenceCodecProvider */
+    private ReferenceCodecProvider referenceCodecProvider = new DefaultReferenceCodecProvider();
     /** 单独提供一个线程池实例 */
     private ExecutorService executor;
     /** Redisson参考功能的配置选项，默认值：true */
-    private boolean redissonReferenceEnabled = true;
+    private boolean referenceEnabled = true;
     /** 如果服务器的绑定地址是本地回路网络接口则自动激活一个 UNIX 域套接字，并同时采用epoll作为传输方式，默认值：false */
     private boolean useLinuxNativeEpoll = false;
     /** 单独指定一个 EventLoopGroup */
