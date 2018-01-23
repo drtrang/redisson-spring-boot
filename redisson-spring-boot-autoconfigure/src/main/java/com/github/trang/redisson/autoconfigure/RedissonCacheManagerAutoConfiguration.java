@@ -55,8 +55,8 @@ public class RedissonCacheManagerAutoConfiguration {
     @ConditionalOnMissingBean
     public RedissonSpringCacheManager redissonCacheManager(RedissonClient redisson) {
         log.info("redisson cache-manager init...");
-        // 构造 ConfigMap
-        Map<String, CacheConfig> config = new HashMap<>(cacheProperties.getConfigs());
+        // 获取 ConfigMap
+        Map<String, CacheConfig> config = cacheProperties.getConfigs();
         // 创建一个名称为 default 的缓存，过期时间为 2 小时，最长空闲时为 10 分钟。
         // 相当于 GuavaCache 的 expireAfterWrite 和 expireAfterAccess
         config.putIfAbsent("default", new CacheConfig(2 * 60 * 60 * 1000, 10 * 60 * 1000));
@@ -67,9 +67,13 @@ public class RedissonCacheManagerAutoConfiguration {
         if (!cacheProperties.isDynamic()) {
             cacheManager.setCacheNames(cacheProperties.getConfigs().keySet());
         }
+        if (cacheProperties.getCodec() != null) {
+            cacheManager.setCodec(cacheProperties.getCodec().getInstance());
+        }
+        if (cacheProperties.getConfigLocation() != null) {
+            cacheManager.setConfigLocation(cacheProperties.getConfigLocation());
+        }
         cacheManager.setAllowNullValues(cacheProperties.isAllowNullValues());
-        cacheManager.setCodec(cacheProperties.getCodec().getInstance());
-        cacheManager.setConfigLocation(cacheProperties.getConfigLocation());
         return customizers.customize(cacheManager);
     }
 
