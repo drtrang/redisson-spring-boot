@@ -36,7 +36,7 @@ public class RedissonProperties {
     private ExecutorService executor;
     /** Redisson参考功能的配置选项，默认值：true */
     private boolean referenceEnabled = true;
-    /** 如果服务器的绑定地址是本地回路网络接口则自动激活一个 UNIX 域套接字，并同时采用epoll作为传输方式，默认值：false */
+    /** 如果服务器的绑定地址是本地回路网络接口则自动激活一个 UNIX 域套接字，并同时采用 epoll 作为传输方式，默认值：false */
     private boolean useLinuxNativeEpoll = false;
     /** 单独指定一个 EventLoopGroup */
     private EventLoopGroup eventLoopGroup;
@@ -74,23 +74,23 @@ public class RedissonProperties {
         private int connectTimeout = 10000;
         /** 命令等待超时时间，，默认值：10000 ms */
         private int timeout = 3000;
-        /** 命令失败重试次数，默认值：3 次 */
+        /** 命令失败重试次数，默认值：3 */
         private int retryAttempts = 3;
         /** 命令重试发送时间间隔，默认值：1500 ms */
         private int retryInterval = 1500;
         /** 重新连接时间间隔，默认值：3000 ms */
         private int reconnectionTimeout = 3000;
-        /** 执行失败最大次数，默认值：3 次 */
+        /** 执行失败最大次数，默认值：3 */
         private int failedAttempts = 3;
         /** Redis 实例密码，默认值：null */
         private String password;
-        /** 单个连接最大订阅数量，默认值：5 个*/
+        /** 单个连接最大订阅数量，默认值：5 */
         private int subscriptionsPerConnection = 5;
         /** 客户端名称，默认值：null */
         private String clientName;
-        /** 启用 SSL 终端识别，默认值：是 */
+        /** 启用 SSL 终端识别，默认值：true */
         private boolean sslEnableEndpointIdentification = true;
-        /** SSL 实现方式，默认值：JDK */
+        /** SSL 实现方式，默认值：jdk */
         private SslProvider sslProvider = SslProvider.JDK;
         /** SSL 信任证书库路径，默认值：null */
         private URI sslTrustStore;
@@ -111,7 +111,7 @@ public class RedissonProperties {
     @Getter
     @Setter
     private static class BaseMasterSlaveServersConfig extends BaseConfig {
-        /** 负载均衡算法，默认值：RoundRobinLoadBalancer */
+        /** 负载均衡算法，默认值：round_robin */
         private LoadBalancerType loadBalancer = LoadBalancerType.ROUND_ROBIN;
         /** 主节点最小空闲连接数，默认值：10 */
         private int masterConnectionMinimumIdleSize = 10;
@@ -125,9 +125,9 @@ public class RedissonProperties {
         private int subscriptionConnectionMinimumIdleSize = 1;
         /** 从节点发布和订阅连接池大小，默认值：50 */
         private int subscriptionConnectionPoolSize = 50;
-        /** 读取操作的负载均衡模式，默认值：SLAVE */
+        /** 读取操作的负载均衡模式，默认值：slave */
         private ReadMode readMode = ReadMode.SLAVE;
-        /** 订阅操作的负载均衡模式，默认值：SLAVE */
+        /** 订阅操作的负载均衡模式，默认值：slave */
         private SubscriptionMode subscriptionMode = SubscriptionMode.SLAVE;
         /** DNS 监测时间间隔，默认值：5000 ms */
         private long dnsMonitoringInterval = 5000;
