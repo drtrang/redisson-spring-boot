@@ -1,5 +1,6 @@
 package com.github.trang.redisson.autoconfigure;
 
+import com.github.trang.autoconfigure.Customizer;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.*;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
@@ -32,7 +33,7 @@ import java.util.List;
 public class RedissonAutoConfiguration {
 
     private RedissonProperties redissonProperties;
-    private List<RedissonCustomizer> customizers;
+    private List<Customizer<Config>> customizers;
 
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingBean
@@ -60,7 +61,7 @@ public class RedissonAutoConfiguration {
                 throw new IllegalArgumentException("illegal parameter: " + redissonProperties.getType());
         }
         if (customizers != null && !customizers.isEmpty()) {
-            for (RedissonCustomizer customizer : customizers) {
+            for (Customizer<Config> customizer : customizers) {
                 customizer.customize(config);
             }
         }
@@ -280,7 +281,7 @@ public class RedissonAutoConfiguration {
     }
 
     @Autowired
-    public void setCustomizers(ObjectProvider<List<RedissonCustomizer>> customizers) {
+    public void setCustomizers(ObjectProvider<List<Customizer<Config>>> customizers) {
         this.customizers = customizers.getIfAvailable();
     }
 
