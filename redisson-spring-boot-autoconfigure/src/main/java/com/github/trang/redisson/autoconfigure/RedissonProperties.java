@@ -3,15 +3,11 @@ package com.github.trang.redisson.autoconfigure;
 import io.netty.channel.EventLoopGroup;
 import lombok.Getter;
 import lombok.Setter;
-import org.redisson.client.codec.Codec;
 import org.redisson.codec.DefaultReferenceCodecProvider;
-import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.codec.ReferenceCodecProvider;
 import org.redisson.config.ReadMode;
 import org.redisson.config.SslProvider;
 import org.redisson.config.SubscriptionMode;
-import org.redisson.connection.balancer.LoadBalancer;
-import org.redisson.connection.balancer.RoundRobinLoadBalancer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -32,8 +28,8 @@ public class RedissonProperties {
     private int threads = 0;
     /** Netty 线程池数量，默认值：当前处理核数量*2 */
     private int nettyThreads = 0;
-    /** Redis 进行序列化和反序列化的类型，默认值：JsonJacksonCodec */
-    private Codec codec = new JsonJacksonCodec();
+    /** Redis 进行序列化和反序列化的类型，默认值：jackson */
+    private CodecType codec = CodecType.JACKSON;
     /** Codec 注册和获取功能的提供者，默认值：DefaultReferenceCodecProvider */
     private ReferenceCodecProvider referenceCodecProvider = new DefaultReferenceCodecProvider();
     /** 单独提供一个线程池实例 */
@@ -48,9 +44,9 @@ public class RedissonProperties {
     private long lockWatchdogTimeout = 30 * 1000;
     /** 是否顺序处理或并发处理 PubSub 消息，默认值：true */
     private boolean keepPubSubOrder = true;
-
-    /** Redis 服务端模式 */
+    /** Redis 服务端模式，默认值：single */
     private RedissonType type = RedissonType.SINGLE;
+
     /** 单节点模式 */
     @NestedConfigurationProperty
     private SingleServerConfig single = new SingleServerConfig();
@@ -66,22 +62,6 @@ public class RedissonProperties {
     /** 云托管模式 */
     @NestedConfigurationProperty
     private ReplicatedServersConfig replicated = new ReplicatedServersConfig();
-
-    /**
-     * Redis 服务端模式
-     */
-    public enum RedissonType {
-        /** 单节点模式 */
-        SINGLE,
-        /** 集群模式 */
-        CLUSTER,
-        /** 主从模式 */
-        MASTER_SLAVE,
-        /** 哨兵模式 */
-        SENTINEL,
-        /** 云托管模式 */
-        REPLICATED
-    }
 
     @Getter
     @Setter
@@ -113,16 +93,16 @@ public class RedissonProperties {
         /** SSL 实现方式，默认值：JDK */
         private SslProvider sslProvider = SslProvider.JDK;
         /** SSL 信任证书库路径，默认值：null */
-        private URI sslTruststore;
+        private URI sslTrustStore;
         /** SSL 信任证书库密码，默认值：null */
-        private String sslTruststorePassword;
+        private String sslTrustStorePassword;
         /** SSL 钥匙库路径，默认值：null */
         private URI sslKeystore;
         /** SSL 钥匙库密码，默认值：null */
         private String sslKeystorePassword;
         /** PING 命令的发送时间间隔，默认值：0 ms */
         private int pingConnectionInterval;
-        /** 开启连接的 TCP KeppAlive 特性，默认值：false */
+        /** 开启连接的 TCP KeepAlive 特性，默认值：false */
         private boolean keepAlive = false;
         /** 开启连接的 TCP NoDelay 特性，默认值：false */
         private boolean tcpNoDelay = false;
@@ -132,7 +112,7 @@ public class RedissonProperties {
     @Setter
     private static class BaseMasterSlaveServersConfig extends BaseConfig {
         /** 负载均衡算法，默认值：RoundRobinLoadBalancer */
-        private LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
+        private LoadBalancerType loadBalancer = LoadBalancerType.ROUND_ROBIN;
         /** 主节点最小空闲连接数，默认值：10 */
         private int masterConnectionMinimumIdleSize = 10;
         /** 主节点连接池大小，默认值：64 */

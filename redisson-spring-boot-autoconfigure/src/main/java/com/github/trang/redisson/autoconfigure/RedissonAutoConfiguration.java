@@ -7,7 +7,6 @@ import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -34,6 +33,12 @@ public class RedissonAutoConfiguration {
 
     private RedissonProperties redissonProperties;
     private List<Customizer<Config>> customizers;
+
+    public RedissonAutoConfiguration(RedissonProperties redissonProperties,
+                                     ObjectProvider<List<Customizer<Config>>> customizers) {
+        this.redissonProperties = redissonProperties;
+        this.customizers = customizers.getIfAvailable();
+    }
 
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingBean
@@ -69,7 +74,7 @@ public class RedissonAutoConfiguration {
     }
 
     private void configGlobal(Config config) {
-        config.setCodec(redissonProperties.getCodec())
+        config.setCodec(redissonProperties.getCodec().getInstance())
                 .setThreads(redissonProperties.getThreads())
                 .setNettyThreads(redissonProperties.getNettyThreads())
                 .setExecutor(redissonProperties.getExecutor())
@@ -98,8 +103,8 @@ public class RedissonAutoConfiguration {
                 .setReconnectionTimeout(properties.getReconnectionTimeout())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
-                .setSslTruststore(properties.getSslTruststore())
-                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslTruststore(properties.getSslTrustStore())
+                .setSslTruststorePassword(properties.getSslKeystorePassword())
                 .setSslKeystore(properties.getSslKeystore())
                 .setSslKeystorePassword(properties.getSslKeystorePassword())
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
@@ -133,8 +138,8 @@ public class RedissonAutoConfiguration {
                 .setReconnectionTimeout(properties.getReconnectionTimeout())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
-                .setSslTruststore(properties.getSslTruststore())
-                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslTruststore(properties.getSslTrustStore())
+                .setSslTruststorePassword(properties.getSslKeystorePassword())
                 .setSslKeystore(properties.getSslKeystore())
                 .setSslKeystorePassword(properties.getSslKeystorePassword())
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
@@ -143,7 +148,7 @@ public class RedissonAutoConfiguration {
                 // ClusterServersConfig
                 .addNodeAddress(properties.getNodeAddresses())
                 .setScanInterval(properties.getScanInterval())
-                .setLoadBalancer(properties.getLoadBalancer())
+                .setLoadBalancer(properties.getLoadBalancer().getInstance())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
                 .setSlaveConnectionMinimumIdleSize(properties.getSlaveConnectionMinimumIdleSize())
@@ -172,8 +177,8 @@ public class RedissonAutoConfiguration {
                 .setReconnectionTimeout(properties.getReconnectionTimeout())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
-                .setSslTruststore(properties.getSslTruststore())
-                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslTruststore(properties.getSslTrustStore())
+                .setSslTruststorePassword(properties.getSslKeystorePassword())
                 .setSslKeystore(properties.getSslKeystore())
                 .setSslKeystorePassword(properties.getSslKeystorePassword())
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
@@ -183,7 +188,7 @@ public class RedissonAutoConfiguration {
                 .setMasterAddress(properties.getMasterAddress())
                 .addSlaveAddress(properties.getSlaveAddresses())
                 .setDatabase(properties.getDatabase())
-                .setLoadBalancer(properties.getLoadBalancer())
+                .setLoadBalancer(properties.getLoadBalancer().getInstance())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
                 .setSlaveConnectionMinimumIdleSize(properties.getSlaveConnectionMinimumIdleSize())
@@ -212,8 +217,8 @@ public class RedissonAutoConfiguration {
                 .setReconnectionTimeout(properties.getReconnectionTimeout())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
-                .setSslTruststore(properties.getSslTruststore())
-                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslTruststore(properties.getSslTrustStore())
+                .setSslTruststorePassword(properties.getSslKeystorePassword())
                 .setSslKeystore(properties.getSslKeystore())
                 .setSslKeystorePassword(properties.getSslKeystorePassword())
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
@@ -223,7 +228,7 @@ public class RedissonAutoConfiguration {
                 .addSentinelAddress(properties.getSentinelAddresses())
                 .setMasterName(properties.getMasterName())
                 .setDatabase(properties.getDatabase())
-                .setLoadBalancer(properties.getLoadBalancer())
+                .setLoadBalancer(properties.getLoadBalancer().getInstance())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
                 .setSlaveConnectionMinimumIdleSize(properties.getSlaveConnectionMinimumIdleSize())
@@ -252,8 +257,8 @@ public class RedissonAutoConfiguration {
                 .setReconnectionTimeout(properties.getReconnectionTimeout())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
-                .setSslTruststore(properties.getSslTruststore())
-                .setSslTruststorePassword(properties.getSslTruststorePassword())
+                .setSslTruststore(properties.getSslTrustStore())
+                .setSslTruststorePassword(properties.getSslKeystorePassword())
                 .setSslKeystore(properties.getSslKeystore())
                 .setSslKeystorePassword(properties.getSslKeystorePassword())
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
@@ -263,7 +268,7 @@ public class RedissonAutoConfiguration {
                 .addNodeAddress(properties.getNodeAddresses())
                 .setScanInterval(properties.getScanInterval())
                 .setDatabase(properties.getDatabase())
-                .setLoadBalancer(properties.getLoadBalancer())
+                .setLoadBalancer(properties.getLoadBalancer().getInstance())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
                 .setSlaveConnectionMinimumIdleSize(properties.getSlaveConnectionMinimumIdleSize())
@@ -273,16 +278,6 @@ public class RedissonAutoConfiguration {
                 .setReadMode(properties.getReadMode())
                 .setSubscriptionMode(properties.getSubscriptionMode())
                 .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
-    }
-
-    @Autowired
-    public void setRedissonProperties(RedissonProperties redissonProperties) {
-        this.redissonProperties = redissonProperties;
-    }
-
-    @Autowired
-    public void setCustomizers(ObjectProvider<List<Customizer<Config>>> customizers) {
-        this.customizers = customizers.getIfAvailable();
     }
 
 }

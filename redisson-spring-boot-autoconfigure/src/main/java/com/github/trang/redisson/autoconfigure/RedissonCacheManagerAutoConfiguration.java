@@ -6,7 +6,6 @@ import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.spring.cache.CacheConfig;
 import org.redisson.spring.cache.RedissonSpringCacheManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizers;
@@ -38,7 +37,13 @@ import java.util.Map;
 public class RedissonCacheManagerAutoConfiguration {
 
     private RedissonCacheManagerProperties cacheProperties;
-    private CacheManagerCustomizers customizerInvoker;
+    private CacheManagerCustomizers customizers;
+
+    public RedissonCacheManagerAutoConfiguration(RedissonCacheManagerProperties cacheProperties,
+                                                 CacheManagerCustomizers customizers) {
+        this.cacheProperties = cacheProperties;
+        this.customizers = customizers;
+    }
 
     /**
      * 构造 RedissonSpringCacheManager
@@ -63,19 +68,9 @@ public class RedissonCacheManagerAutoConfiguration {
             cacheManager.setCacheNames(cacheProperties.getConfigs().keySet());
         }
         cacheManager.setAllowNullValues(cacheProperties.isAllowNullValues());
-        cacheManager.setCodec(cacheProperties.getCodec());
+        cacheManager.setCodec(cacheProperties.getCodec().getInstance());
         cacheManager.setConfigLocation(cacheProperties.getConfigLocation());
-        return customizerInvoker.customize(cacheManager);
-    }
-
-    @Autowired
-    public void setCacheProperties(RedissonCacheManagerProperties cacheProperties) {
-        this.cacheProperties = cacheProperties;
-    }
-
-    @Autowired(required = false)
-    public void setCustomizerInvoker(CacheManagerCustomizers customizerInvoker) {
-        this.customizerInvoker = customizerInvoker;
+        return customizers.customize(cacheManager);
     }
 
 }

@@ -3,7 +3,7 @@ package com.github.trang.redisson.autoconfigure;
 import com.github.trang.autoconfigure.condition.ConditionalOnBeans;
 import com.github.trang.autoconfigure.condition.ConditionalOnMissingBeans;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -32,6 +32,10 @@ public class CompositeCacheManagerAutoConfiguration {
 
     private List<CacheManager> cacheManagers;
 
+    public CompositeCacheManagerAutoConfiguration(ObjectProvider<List<CacheManager>> cacheManagers) {
+        this.cacheManagers = cacheManagers.getIfAvailable();
+    }
+
     /**
      * 构造 CacheManager，只有在配置 fallbackToNoOpCache 后才会创建
      *
@@ -48,11 +52,6 @@ public class CompositeCacheManagerAutoConfiguration {
         // 设置 NoOpCacheManager，判断当获取不存在的 Cache 时是否会抛出异常
         compositeCacheManager.setFallbackToNoOpCache(true);
         return compositeCacheManager;
-    }
-
-    @Autowired(required = false)
-    public void setCacheManagers(List<CacheManager> cacheManagers) {
-        this.cacheManagers = cacheManagers;
     }
 
 }
