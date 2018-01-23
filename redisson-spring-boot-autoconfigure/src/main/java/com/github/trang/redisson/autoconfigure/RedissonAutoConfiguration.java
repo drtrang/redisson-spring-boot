@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
@@ -14,6 +15,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 /**
  * Redisson 自动配置
@@ -29,6 +32,7 @@ import org.springframework.context.annotation.Configuration;
 public class RedissonAutoConfiguration {
 
     private RedissonProperties redissonProperties;
+    private List<RedissonCustomizer> customizers;
 
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingBean
@@ -54,6 +58,11 @@ public class RedissonAutoConfiguration {
                 break;
             default:
                 throw new IllegalArgumentException("illegal parameter: " + redissonProperties.getType());
+        }
+        if (customizers != null && !customizers.isEmpty()) {
+            for (RedissonCustomizer customizer : customizers) {
+                customizer.customize(config);
+            }
         }
         return Redisson.create(config);
     }
@@ -268,6 +277,11 @@ public class RedissonAutoConfiguration {
     @Autowired
     public void setRedissonProperties(RedissonProperties redissonProperties) {
         this.redissonProperties = redissonProperties;
+    }
+
+    @Autowired
+    public void setCustomizers(ObjectProvider<List<RedissonCustomizer>> customizers) {
+        this.customizers = customizers.getIfAvailable();
     }
 
 }
