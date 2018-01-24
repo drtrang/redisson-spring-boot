@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.github.drtrang</groupId>
         <artifactId>redisson-spring-boot</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <artifactId>redisson-spring-boot-autoconfigure</artifactId>

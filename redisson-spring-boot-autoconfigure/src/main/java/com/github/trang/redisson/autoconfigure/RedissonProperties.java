@@ -1,5 +1,8 @@
 package com.github.trang.redisson.autoconfigure;
 
+import com.github.trang.redisson.autoconfigure.enums.CodecType;
+import com.github.trang.redisson.autoconfigure.enums.LoadBalancerType;
+import com.github.trang.redisson.autoconfigure.enums.RedissonType;
 import io.netty.channel.EventLoopGroup;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,6 @@
 package com.github.trang.redisson.autoconfigure;
 
+import com.github.trang.redisson.autoconfigure.enums.CodecType;
 import lombok.Getter;
 import lombok.Setter;
 import org.redisson.spring.cache.CacheConfig;

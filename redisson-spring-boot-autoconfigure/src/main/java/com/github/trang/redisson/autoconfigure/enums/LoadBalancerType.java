@@ -1,4 +1,4 @@
-package com.github.trang.redisson.autoconfigure;
+package com.github.trang.redisson.autoconfigure.enums;
 
 import org.redisson.connection.balancer.LoadBalancer;
 import org.redisson.connection.balancer.RandomLoadBalancer;

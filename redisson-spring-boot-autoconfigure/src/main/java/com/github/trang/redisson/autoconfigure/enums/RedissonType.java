@@ -1,4 +1,4 @@
-package com.github.trang.redisson.autoconfigure;
+package com.github.trang.redisson.autoconfigure.enums;
 
 /**
  * Redis 服务端模式
