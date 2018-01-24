@@ -45,7 +45,7 @@
     </modules>
 
     <properties>
-        <spring-boot-autoconfigure.version>1.0.4-SNAPSHOT</spring-boot-autoconfigure.version>
+        <spring-boot-autoconfigure.version>1.0.4</spring-boot-autoconfigure.version>
     </properties>
 
     <dependencyManagement>
