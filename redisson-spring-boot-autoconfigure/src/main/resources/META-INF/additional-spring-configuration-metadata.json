@@ -1,5 +1,4 @@
 {
-  "hints": [],
   "groups": [
     {
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonCacheManagerProperties",
@@ -49,7 +48,7 @@
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonCacheManagerProperties",
       "name": "spring.cache.codec",
       "description": "序列化类型.",
-      "type": "com.github.trang.redisson.autoconfigure.CodecType"
+      "type": "com.github.trang.redisson.autoconfigure.enums.CodecType"
     },
     {
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonCacheManagerProperties",
@@ -122,7 +121,7 @@
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties$ClusterServersConfig",
       "name": "spring.redisson.cluster.load-balancer",
       "description": "负载均衡算法，默认值：round_robin.",
-      "type": "com.github.trang.redisson.autoconfigure.LoadBalancerType"
+      "type": "com.github.trang.redisson.autoconfigure.enums.LoadBalancerType"
     },
     {
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties$ClusterServersConfig",
@@ -294,7 +293,7 @@
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties",
       "name": "spring.redisson.codec",
       "description": "Redis 进行序列化和反序列化的类型，默认值：jackson.",
-      "type": "com.github.trang.redisson.autoconfigure.CodecType"
+      "type": "com.github.trang.redisson.autoconfigure.enums.CodecType"
     },
     {
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties",
@@ -374,7 +373,7 @@
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties$MasterSlaveServersConfig",
       "name": "spring.redisson.master-slave.load-balancer",
       "description": "负载均衡算法，默认值：round_robin.",
-      "type": "com.github.trang.redisson.autoconfigure.LoadBalancerType"
+      "type": "com.github.trang.redisson.autoconfigure.enums.LoadBalancerType"
     },
     {
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties$MasterSlaveServersConfig",
@@ -613,7 +612,7 @@
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties$ReplicatedServersConfig",
       "name": "spring.redisson.replicated.load-balancer",
       "description": "负载均衡算法，默认值：round_robin.",
-      "type": "com.github.trang.redisson.autoconfigure.LoadBalancerType"
+      "type": "com.github.trang.redisson.autoconfigure.enums.LoadBalancerType"
     },
     {
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties$ReplicatedServersConfig",
@@ -833,7 +832,7 @@
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties$SentinelServersConfig",
       "name": "spring.redisson.sentinel.load-balancer",
       "description": "负载均衡算法，默认值：round_robin.",
-      "type": "com.github.trang.redisson.autoconfigure.LoadBalancerType"
+      "type": "com.github.trang.redisson.autoconfigure.enums.LoadBalancerType"
     },
     {
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties$SentinelServersConfig",
@@ -1200,7 +1199,7 @@
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties",
       "name": "spring.redisson.type",
       "description": "Redis 服务端模式，默认值：single.",
-      "type": "com.github.trang.redisson.autoconfigure.RedissonType"
+      "type": "com.github.trang.redisson.autoconfigure.enums.RedissonType"
     },
     {
       "sourceType": "com.github.trang.redisson.autoconfigure.RedissonProperties",
@@ -1208,6 +1207,41 @@
       "name": "spring.redisson.use-linux-native-epoll",
       "description": "如果服务器的绑定地址是本地回路网络接口则自动激活一个 UNIX 域套接字，并同时采用 epoll 作为传输方式，默认值：false.",
       "type": "java.lang.Boolean"
+    }
+  ],
+  "hints": [
+    {
+      "name": "spring.redisson.reference-codec-provider",
+      "providers": [
+        {
+          "name": "class-reference",
+          "parameters": {
+            "target": "org.redisson.codec.ReferenceCodecProvider"
+          }
+        }
+      ]
+    },
+    {
+      "name": "spring.redisson.executor",
+      "providers": [
+        {
+          "name": "class-reference",
+          "parameters": {
+            "target": "java.util.concurrent.ExecutorService"
+          }
+        }
+      ]
+    },
+    {
+      "name": "spring.redisson.event-loop-group",
+      "providers": [
+        {
+          "name": "class-reference",
+          "parameters": {
+            "target": "io.netty.channel.EventLoopGroup"
+          }
+        }
+      ]
     }
   ]
 }
