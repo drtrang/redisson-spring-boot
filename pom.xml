@@ -55,8 +55,9 @@
     </modules>
 
     <properties>
-        <redisson.version>3.6.0</redisson.version>
         <drtrang.spring-boot-autoconfigure.version>1.0.4</drtrang.spring-boot-autoconfigure.version>
+        <netty.version>4.1.20.Final</netty.version>
+        <redisson.version>3.6.0</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -78,5 +79,16 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
