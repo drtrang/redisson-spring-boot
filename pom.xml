@@ -7,37 +7,47 @@
     <parent>
         <groupId>com.github.drtrang</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.7</version>
+        <version>1.0.8</version>
     </parent>
 
     <artifactId>redisson-spring-boot</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>pom</packaging>
 
     <name>Redisson Spring Boot Starter</name>
-    <description>Spring Boot Starter for Redisson.</description>
+    <description>Spring Boot Starter for Redisson</description>
     <url>https://github.com/drtrang/redisson-spring-boot</url>
+
+    <inceptionYear>2017</inceptionYear>
+
+    <developers>
+        <developer>
+            <id>trang</id>
+            <name>trang</name>
+            <email>donghao.l@hotmail.com</email>
+            <timezone>+8</timezone>
+            <url>http://blog.trang.space/</url>
+        </developer>
+    </developers>
 
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>https://github.com/drtrang/redisson-spring-boot/blob/master/LICENSE</url>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <name>trang</name>
-            <email>donghao.l@hotmail.com</email>
-        </developer>
-    </developers>
-
     <scm>
-        <url>https://github.com/drtrang/redisson-spring-boot.git</url>
         <connection>scm:git:https://github.com/drtrang/redisson-spring-boot.git</connection>
-        <developerConnection>scm:git:https://github.com/drtrang</developerConnection>
-        <tag>HEAD</tag>
+        <developerConnection>scm:git:git@github.com:drtrang/redisson-spring-boot.git</developerConnection>
+        <url>https://github.com/drtrang/redisson-spring-boot.git</url>
     </scm>
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/drtrang/redisson-spring-boot/issues</url>
+    </issueManagement>
 
     <modules>
         <module>redisson-spring-boot-autoconfigure</module>
@@ -45,7 +55,8 @@
     </modules>
 
     <properties>
-        <spring-boot-autoconfigure.version>1.0.4</spring-boot-autoconfigure.version>
+        <redisson.version>3.6.0</redisson.version>
+        <drtrang.spring-boot-autoconfigure.version>1.0.4</drtrang.spring-boot-autoconfigure.version>
     </properties>
 
     <dependencyManagement>
@@ -63,7 +74,7 @@
             <dependency>
                 <groupId>com.github.drtrang</groupId>
                 <artifactId>spring-boot-autoconfigure</artifactId>
-                <version>${spring-boot-autoconfigure.version}</version>
+                <version>${drtrang.spring-boot-autoconfigure.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

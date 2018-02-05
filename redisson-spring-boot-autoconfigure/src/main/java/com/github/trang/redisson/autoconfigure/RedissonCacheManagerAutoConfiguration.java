@@ -18,7 +18,6 @@ import org.springframework.cache.interceptor.CacheAspectSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -70,7 +69,7 @@ public class RedissonCacheManagerAutoConfiguration {
         if (cacheProperties.getCodec() != null) {
             cacheManager.setCodec(cacheProperties.getCodec().getInstance());
         }
-        if (cacheProperties.getConfigLocation() != null) {
+        if (cacheProperties.getConfigLocation() != null && !cacheProperties.getConfigLocation().isEmpty()) {
             cacheManager.setConfigLocation(cacheProperties.getConfigLocation());
         }
         cacheManager.setAllowNullValues(cacheProperties.isAllowNullValues());
