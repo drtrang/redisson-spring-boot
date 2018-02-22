@@ -55,10 +55,12 @@ public class RedissonCacheManagerAutoConfiguration {
     public RedissonSpringCacheManager redissonCacheManager(RedissonClient redisson) {
         log.info("redisson cache-manager init...");
         // 获取 ConfigMap
+        // CacheConfig:
+        //   ttl         过期时间，key 写入一定时间后删除，相当于 GuavaCache 的 expireAfterWrite
+        //   maxIdleTime 最大空闲时间，key 一定时间内没有被访问后删除，相当于 GuavaCache 的 expireAfterAccess
+        //   maxIdleTime 最大数量，达到一定数量后删除一部分 key，基于 LRU 算法
         Map<String, CacheConfig> config = cacheProperties.getConfigs();
-        // 创建一个名称为 default 的缓存，过期时间为 2 小时，最长空闲时为 10 分钟。
-        // 相当于 GuavaCache 的 expireAfterWrite 和 expireAfterAccess
-        config.putIfAbsent("default", new CacheConfig(2 * 60 * 60 * 1000, 10 * 60 * 1000));
+        // 创建 CacheManager，ConfigMap 会转换为 Cache
         RedissonSpringCacheManager cacheManager = new RedissonSpringCacheManager(redisson, config);
         // RedissonSpringCacheManager 中的 dynamic 属性默认为 true
         // 当获取不存在的 Cache 时会自动创建一个永不过期的 Cache，通过设置 CacheNames 禁用该功能
