@@ -60,8 +60,8 @@
     </issueManagement>
 
     <modules>
-        <module>redisson-spring-boot2-autoconfigure</module>
-        <module>redisson-spring-boot2-starter</module>
+        <module>redisson-spring-boot-autoconfigure</module>
+        <module>redisson-spring-boot-starter</module>
     </modules>
 
     <dependencyManagement>
