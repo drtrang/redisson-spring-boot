@@ -1,10 +1,17 @@
 package com.github.trang.redisson.autoconfigure;
 
+<<<<<<< HEAD:redisson-spring-boot-autoconfigure/src/main/java/com/github/trang/redisson/autoconfigure/CompositeCacheManagerAutoConfiguration.java
 import com.github.trang.autoconfigure.condition.ConditionalOnBeans;
+=======
+>>>>>>> 1.1.1:redisson-spring-boot2-autoconfigure/src/main/java/com/github/trang/redisson/autoconfigure/CompositeCacheManagerAutoConfiguration.java
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
+<<<<<<< HEAD:redisson-spring-boot-autoconfigure/src/main/java/com/github/trang/redisson/autoconfigure/CompositeCacheManagerAutoConfiguration.java
+=======
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+>>>>>>> 1.1.1:redisson-spring-boot2-autoconfigure/src/main/java/com/github/trang/redisson/autoconfigure/CompositeCacheManagerAutoConfiguration.java
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
@@ -23,10 +30,17 @@ import java.util.List;
  * @author trang
  */
 @Configuration
+<<<<<<< HEAD:redisson-spring-boot-autoconfigure/src/main/java/com/github/trang/redisson/autoconfigure/CompositeCacheManagerAutoConfiguration.java
 @ConditionalOnBeans({CacheAspectSupport.class, CacheManager.class})
 @ConditionalOnMissingBean({CompositeCacheManager.class, NoOpCacheManager.class})
 @ConditionalOnProperty(prefix = "redisson.spring.cache-manager", name = "fallback-to-no-op-cache", havingValue = "true")
 @AutoConfigureAfter({CacheAutoConfiguration.class, RedissonSpringAutoConfiguration.class})
+=======
+@ConditionalOnBean({CacheAspectSupport.class, CacheManager.class})
+@ConditionalOnMissingBean({CompositeCacheManager.class, NoOpCacheManager.class})
+@ConditionalOnProperty(prefix = "spring.cache", name = "fallbackToNoOpCache", havingValue = "true")
+@AutoConfigureAfter({CacheAutoConfiguration.class, RedissonCacheManagerAutoConfiguration.class})
+>>>>>>> 1.1.1:redisson-spring-boot2-autoconfigure/src/main/java/com/github/trang/redisson/autoconfigure/CompositeCacheManagerAutoConfiguration.java
 @Slf4j
 public class CompositeCacheManagerAutoConfiguration {
 

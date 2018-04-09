@@ -9,12 +9,12 @@
         <version>1.2.2.SNAPSHOT</version>
     </parent>
 
-    <artifactId>redisson-spring-boot-starter</artifactId>
+    <artifactId>redisson-spring-boot2-starter</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.github.drtrang</groupId>
-            <artifactId>redisson-spring-boot-autoconfigure</artifactId>
+            <artifactId>redisson-spring-boot2-autoconfigure</artifactId>
         </dependency>
         <dependency>
             <groupId>org.redisson</groupId>
