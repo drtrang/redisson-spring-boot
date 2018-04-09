@@ -1,11 +1,11 @@
 package com.github.trang.redisson.autoconfigure;
 
 import com.github.trang.autoconfigure.condition.ConditionalOnBeans;
-import com.github.trang.autoconfigure.condition.ConditionalOnMissingBeans;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.interceptor.CacheAspectSupport;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Configuration
 @ConditionalOnBeans({CacheAspectSupport.class, CacheManager.class})
-@ConditionalOnMissingBeans({CompositeCacheManager.class, NoOpCacheManager.class})
+@ConditionalOnMissingBean({CompositeCacheManager.class, NoOpCacheManager.class})
 @ConditionalOnProperty(prefix = "spring.cache", name = "fallbackToNoOpCache", havingValue = "true")
 @AutoConfigureAfter({CacheAutoConfiguration.class, RedissonCacheManagerAutoConfiguration.class})
 @Slf4j
