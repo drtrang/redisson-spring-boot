@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.github.drtrang</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>parent2</artifactId>
         <version>1.1.2</version>
     </parent>
 
@@ -50,8 +50,8 @@
     </issueManagement>
 
     <modules>
-        <module>redisson-spring-boot-autoconfigure</module>
-        <module>redisson-spring-boot-starter</module>
+        <module>redisson-spring-boot2-autoconfigure</module>
+        <module>redisson-spring-boot2-starter</module>
     </modules>
 
     <properties>
@@ -63,17 +63,17 @@
         <dependencies>
             <dependency>
                 <groupId>com.github.drtrang</groupId>
-                <artifactId>redisson-spring-boot-autoconfigure</artifactId>
+                <artifactId>redisson-spring-boot2-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.drtrang</groupId>
-                <artifactId>redisson-spring-boot-starter</artifactId>
+                <artifactId>redisson-spring-boot2-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.drtrang</groupId>
-                <artifactId>spring-boot-autoconfigure</artifactId>
+                <artifactId>spring-boot2-autoconfigure</artifactId>
                 <version>${trang.spring-boot-autoconfigure.version}</version>
             </dependency>
         </dependencies>

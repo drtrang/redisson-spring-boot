@@ -1,6 +1,5 @@
 package com.github.trang.redisson.autoconfigure;
 
-import com.github.trang.autoconfigure.condition.ConditionalOnBeans;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -9,6 +8,7 @@ import org.redisson.spring.cache.RedissonSpringCacheManager;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizers;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @Configuration
 @ConditionalOnClass(Redisson.class)
-@ConditionalOnBeans({CacheAspectSupport.class, RedissonClient.class})
+@ConditionalOnBean({CacheAspectSupport.class, RedissonClient.class})
 @ConditionalOnMissingBean(CacheManager.class)
 @ConditionalOnProperty(prefix = "spring.cache", name = "type", havingValue = "redis")
 @AutoConfigureAfter({CacheAutoConfiguration.class, RedissonAutoConfiguration.class})
