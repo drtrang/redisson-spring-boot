@@ -7,11 +7,11 @@
     <parent>
         <groupId>com.github.drtrang</groupId>
         <artifactId>parent</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.1.2</version>
     </parent>
 
     <artifactId>redisson-spring-boot</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
     <packaging>pom</packaging>
 
     <name>Redisson Spring Boot Starter</name>
@@ -55,8 +55,8 @@
     </modules>
 
     <properties>
-        <drtrang.spring-boot-autoconfigure.version>1.1.1-SNAPSHOT</drtrang.spring-boot-autoconfigure.version>
-        <redisson.version>3.6.1</redisson.version>
+        <trang.spring-boot-autoconfigure.version>1.1.1</trang.spring-boot-autoconfigure.version>
+        <redisson.version>3.6.4</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -74,7 +74,7 @@
             <dependency>
                 <groupId>com.github.drtrang</groupId>
                 <artifactId>spring-boot-autoconfigure</artifactId>
-                <version>${drtrang.spring-boot-autoconfigure.version}</version>
+                <version>${trang.spring-boot-autoconfigure.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

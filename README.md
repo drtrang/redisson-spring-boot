@@ -12,6 +12,6 @@ Redisson Spring Boot Starter 将帮助你在 Spring Boot 中使用 Redisson。
 <dependency>
     <groupId>com.github.drtrang</groupId>
     <artifactId>redisson-spring-boot-starter</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
 </dependency>
 ```
