@@ -10,8 +10,12 @@
         <version>1.2.1</version>
 =======
         <artifactId>parent2</artifactId>
+<<<<<<< HEAD
         <version>1.1.2</version>
 >>>>>>> 1.1.1
+=======
+        <version>1.2.0</version>
+>>>>>>> 1.2.0
     </parent>
 
 <<<<<<< HEAD
@@ -19,8 +23,12 @@
     <version>1.2.2.SNAPSHOT</version>
 =======
     <artifactId>redisson-spring-boot2</artifactId>
+<<<<<<< HEAD
     <version>1.1.1</version>
 >>>>>>> 1.1.1
+=======
+    <version>1.2.0</version>
+>>>>>>> 1.2.0
     <packaging>pom</packaging>
 
 <<<<<<< HEAD
@@ -81,6 +89,7 @@
                 <version>${project.version}</version>
             </dependency>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             <dependency>
                 <groupId>com.github.drtrang</groupId>
@@ -88,6 +97,8 @@
                 <version>${trang.spring-boot-autoconfigure.version}</version>
             </dependency>
 >>>>>>> 1.1.1
+=======
+>>>>>>> 1.2.0
         </dependencies>
     </dependencyManagement>
 

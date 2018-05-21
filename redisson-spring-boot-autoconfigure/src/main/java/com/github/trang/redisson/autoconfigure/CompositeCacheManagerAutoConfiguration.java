@@ -38,9 +38,14 @@ import java.util.List;
 =======
 @ConditionalOnBean({CacheAspectSupport.class, CacheManager.class})
 @ConditionalOnMissingBean({CompositeCacheManager.class, NoOpCacheManager.class})
+<<<<<<< HEAD
 @ConditionalOnProperty(prefix = "spring.cache", name = "fallbackToNoOpCache", havingValue = "true")
 @AutoConfigureAfter({CacheAutoConfiguration.class, RedissonCacheManagerAutoConfiguration.class})
 >>>>>>> 1.1.1:redisson-spring-boot2-autoconfigure/src/main/java/com/github/trang/redisson/autoconfigure/CompositeCacheManagerAutoConfiguration.java
+=======
+@ConditionalOnProperty(prefix = "redisson.spring.cache-manager", name = "fallback-to-no-op-cache", havingValue = "true")
+@AutoConfigureAfter({CacheAutoConfiguration.class, RedissonSpringAutoConfiguration.class})
+>>>>>>> 1.2.0
 @Slf4j
 public class CompositeCacheManagerAutoConfiguration {
 
