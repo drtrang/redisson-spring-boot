@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
  *
  * @author trang
  */
-@ConfigurationProperties(prefix = "spring.redisson")
+@ConfigurationProperties(prefix = "redisson")
 @Getter
 @Setter
 public class RedissonProperties {
@@ -41,6 +41,7 @@ public class RedissonProperties {
     private ExecutorService executor;
     /** Redisson 参考功能的配置选项，默认值：true */
     private boolean referenceEnabled = true;
+    /** TransportMode，默认值：NIO */
     private TransportMode transportMode = TransportMode.NIO;
     /** 单独指定一个 EventLoopGroup */
     private EventLoopGroup eventLoopGroup;
@@ -154,8 +155,6 @@ public class RedissonProperties {
         private int subscriptionConnectionMinimumIdleSize = 1;
         /** 发布和订阅连接池大小，默认值：50 */
         private int subscriptionConnectionPoolSize = 50;
-        /** 是否启用 DNS 监测，默认值：true */
-        private boolean dnsMonitoring = true;
         /** DNS 监测时间间隔，默认值：5000 ms */
         private long dnsMonitoringInterval = 5000L;
     }
