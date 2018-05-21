@@ -25,8 +25,8 @@ import java.util.List;
 @Configuration
 @ConditionalOnBean({CacheAspectSupport.class, CacheManager.class})
 @ConditionalOnMissingBean({CompositeCacheManager.class, NoOpCacheManager.class})
-@ConditionalOnProperty(prefix = "spring.cache", name = "fallbackToNoOpCache", havingValue = "true")
-@AutoConfigureAfter({CacheAutoConfiguration.class, RedissonCacheManagerAutoConfiguration.class})
+@ConditionalOnProperty(prefix = "redisson.spring.cache-manager", name = "fallback-to-no-op-cache", havingValue = "true")
+@AutoConfigureAfter({CacheAutoConfiguration.class, RedissonSpringAutoConfiguration.class})
 @Slf4j
 public class CompositeCacheManagerAutoConfiguration {
 
@@ -37,7 +37,7 @@ public class CompositeCacheManagerAutoConfiguration {
     }
 
     /**
-     * 构造 CacheManager，只有在配置 fallbackToNoOpCache 后才会创建
+     * 构造 CacheManager，只有在配置 fallbackToNoOpCache=true 后才会创建
      *
      * @return CompositeCacheManager cacheManager
      */

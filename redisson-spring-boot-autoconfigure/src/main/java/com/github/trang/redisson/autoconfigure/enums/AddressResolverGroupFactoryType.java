@@ -11,14 +11,19 @@ import org.redisson.connection.RoundRobinDnsAddressResolverGroupFactory;
  */
 public enum AddressResolverGroupFactoryType {
 
-    /** 默认 */
+    /**
+     * 默认
+     */
     DEFAULT {
         @Override
         public AddressResolverGroupFactory getInstance() {
             return new DnsAddressResolverGroupFactory();
         }
     },
-    /** 轮询 */
+
+    /**
+     * 轮询
+     */
     ROUND_ROBIN {
         @Override
         public AddressResolverGroupFactory getInstance() {

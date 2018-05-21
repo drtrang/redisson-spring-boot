@@ -63,7 +63,7 @@ public class RedissonAutoConfiguration {
                 configReplicated(config);
                 break;
             default:
-                throw new IllegalArgumentException("illegal parameter: " + redissonProperties.getType());
+                throw new IllegalArgumentException("illegal redisson type: " + redissonProperties.getType());
         }
         if (customizers != null && !customizers.isEmpty()) {
             for (Customizer<Config> customizer : customizers) {
@@ -83,8 +83,8 @@ public class RedissonAutoConfiguration {
                 .setEventLoopGroup(redissonProperties.getEventLoopGroup())
                 .setReferenceCodecProvider(redissonProperties.getReferenceCodecProvider())
                 .setLockWatchdogTimeout(redissonProperties.getLockWatchdogTimeout())
+                .setAddressResolverGroupFactory(redissonProperties.getAddressResolverGroupFactory().getInstance())
                 .setReferenceEnabled(redissonProperties.isReferenceEnabled());
-        config.setAddressResolverGroupFactory(redissonProperties.getAddressResolverGroupFactory().getInstance());
     }
 
     private void configSingle(Config config) {
@@ -116,7 +116,6 @@ public class RedissonAutoConfiguration {
                 .setConnectionPoolSize(properties.getConnectionPoolSize())
                 .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
                 .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
-                .setDnsMonitoring(properties.isDnsMonitoring())
                 .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
     }
 
@@ -133,8 +132,6 @@ public class RedissonAutoConfiguration {
                 .setPingTimeout(properties.getPingTimeout())
                 .setConnectTimeout(properties.getConnectTimeout())
                 .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
-                .setFailedSlaveCheckInterval(properties.getFailedSlaveCheckInterval())
-                .setFailedSlaveReconnectionInterval(properties.getFailedSlaveReconnectionInterval())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
                 .setSslTruststore(properties.getSslTrustStore())
@@ -144,9 +141,7 @@ public class RedissonAutoConfiguration {
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
                 .setKeepAlive(properties.isKeepAlive())
                 .setTcpNoDelay(properties.isTcpNoDelay())
-                // ClusterServersConfig
-                .addNodeAddress(properties.getNodeAddresses())
-                .setScanInterval(properties.getScanInterval())
+                // BaseMasterSlaveServersConfig
                 .setLoadBalancer(properties.getLoadBalancer().getInstance())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
@@ -154,9 +149,14 @@ public class RedissonAutoConfiguration {
                 .setSlaveConnectionPoolSize(properties.getSlaveConnectionPoolSize())
                 .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
                 .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setFailedSlaveCheckInterval(properties.getFailedSlaveCheckInterval())
+                .setFailedSlaveReconnectionInterval(properties.getFailedSlaveReconnectionInterval())
                 .setReadMode(properties.getReadMode())
                 .setSubscriptionMode(properties.getSubscriptionMode())
-                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval())
+                // ClusterServersConfig
+                .addNodeAddress(properties.getNodeAddresses())
+                .setScanInterval(properties.getScanInterval());
     }
 
     private void configMasterSlave(Config config) {
@@ -172,8 +172,6 @@ public class RedissonAutoConfiguration {
                 .setPingTimeout(properties.getPingTimeout())
                 .setConnectTimeout(properties.getConnectTimeout())
                 .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
-                .setFailedSlaveCheckInterval(properties.getFailedSlaveCheckInterval())
-                .setFailedSlaveReconnectionInterval(properties.getFailedSlaveReconnectionInterval())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
                 .setSslTruststore(properties.getSslTrustStore())
@@ -183,10 +181,7 @@ public class RedissonAutoConfiguration {
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
                 .setKeepAlive(properties.isKeepAlive())
                 .setTcpNoDelay(properties.isTcpNoDelay())
-                // MasterSlaveServersConfig
-                .setMasterAddress(properties.getMasterAddress())
-                .addSlaveAddress(properties.getSlaveAddresses())
-                .setDatabase(properties.getDatabase())
+                // BaseMasterSlaveServersConfig
                 .setLoadBalancer(properties.getLoadBalancer().getInstance())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
@@ -194,9 +189,15 @@ public class RedissonAutoConfiguration {
                 .setSlaveConnectionPoolSize(properties.getSlaveConnectionPoolSize())
                 .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
                 .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setFailedSlaveCheckInterval(properties.getFailedSlaveCheckInterval())
+                .setFailedSlaveReconnectionInterval(properties.getFailedSlaveReconnectionInterval())
                 .setReadMode(properties.getReadMode())
                 .setSubscriptionMode(properties.getSubscriptionMode())
-                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval())
+                // MasterSlaveServersConfig
+                .setMasterAddress(properties.getMasterAddress())
+                .addSlaveAddress(properties.getSlaveAddresses())
+                .setDatabase(properties.getDatabase());
     }
 
     private void configSentinel(Config config) {
@@ -212,8 +213,6 @@ public class RedissonAutoConfiguration {
                 .setPingTimeout(properties.getPingTimeout())
                 .setConnectTimeout(properties.getConnectTimeout())
                 .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
-                .setFailedSlaveCheckInterval(properties.getFailedSlaveCheckInterval())
-                .setFailedSlaveReconnectionInterval(properties.getFailedSlaveReconnectionInterval())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
                 .setSslTruststore(properties.getSslTrustStore())
@@ -223,11 +222,7 @@ public class RedissonAutoConfiguration {
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
                 .setKeepAlive(properties.isKeepAlive())
                 .setTcpNoDelay(properties.isTcpNoDelay())
-                // SentinelServersConfig
-                .addSentinelAddress(properties.getSentinelAddresses())
-                .setMasterName(properties.getMasterName())
-                .setScanInterval(properties.getScanInterval())
-                .setDatabase(properties.getDatabase())
+                // BaseMasterSlaveServersConfig
                 .setLoadBalancer(properties.getLoadBalancer().getInstance())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
@@ -235,9 +230,16 @@ public class RedissonAutoConfiguration {
                 .setSlaveConnectionPoolSize(properties.getSlaveConnectionPoolSize())
                 .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
                 .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setFailedSlaveCheckInterval(properties.getFailedSlaveCheckInterval())
+                .setFailedSlaveReconnectionInterval(properties.getFailedSlaveReconnectionInterval())
                 .setReadMode(properties.getReadMode())
                 .setSubscriptionMode(properties.getSubscriptionMode())
-                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval())
+                // SentinelServersConfig
+                .addSentinelAddress(properties.getSentinelAddresses())
+                .setMasterName(properties.getMasterName())
+                .setScanInterval(properties.getScanInterval())
+                .setDatabase(properties.getDatabase());
     }
 
     private void configReplicated(Config config) {
@@ -253,8 +255,6 @@ public class RedissonAutoConfiguration {
                 .setPingTimeout(properties.getPingTimeout())
                 .setConnectTimeout(properties.getConnectTimeout())
                 .setIdleConnectionTimeout(properties.getIdleConnectionTimeout())
-                .setFailedSlaveCheckInterval(properties.getFailedSlaveCheckInterval())
-                .setFailedSlaveReconnectionInterval(properties.getFailedSlaveReconnectionInterval())
                 .setSslEnableEndpointIdentification(properties.isSslEnableEndpointIdentification())
                 .setSslProvider(properties.getSslProvider())
                 .setSslTruststore(properties.getSslTrustStore())
@@ -264,10 +264,7 @@ public class RedissonAutoConfiguration {
                 .setPingConnectionInterval(properties.getPingConnectionInterval())
                 .setKeepAlive(properties.isKeepAlive())
                 .setTcpNoDelay(properties.isTcpNoDelay())
-                // ReplicatedServersConfig
-                .addNodeAddress(properties.getNodeAddresses())
-                .setScanInterval(properties.getScanInterval())
-                .setDatabase(properties.getDatabase())
+                // BaseMasterSlaveServersConfig
                 .setLoadBalancer(properties.getLoadBalancer().getInstance())
                 .setMasterConnectionMinimumIdleSize(properties.getMasterConnectionMinimumIdleSize())
                 .setMasterConnectionPoolSize(properties.getMasterConnectionPoolSize())
@@ -275,9 +272,15 @@ public class RedissonAutoConfiguration {
                 .setSlaveConnectionPoolSize(properties.getSlaveConnectionPoolSize())
                 .setSubscriptionConnectionMinimumIdleSize(properties.getSubscriptionConnectionMinimumIdleSize())
                 .setSubscriptionConnectionPoolSize(properties.getSubscriptionConnectionPoolSize())
+                .setFailedSlaveCheckInterval(properties.getFailedSlaveCheckInterval())
+                .setFailedSlaveReconnectionInterval(properties.getFailedSlaveReconnectionInterval())
                 .setReadMode(properties.getReadMode())
                 .setSubscriptionMode(properties.getSubscriptionMode())
-                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval());
+                .setDnsMonitoringInterval(properties.getDnsMonitoringInterval())
+                // ReplicatedServersConfig
+                .addNodeAddress(properties.getNodeAddresses())
+                .setScanInterval(properties.getScanInterval())
+                .setDatabase(properties.getDatabase());
     }
 
 }
