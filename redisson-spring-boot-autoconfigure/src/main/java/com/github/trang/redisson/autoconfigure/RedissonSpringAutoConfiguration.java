@@ -52,7 +52,7 @@ public class RedissonSpringAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnBean(CacheAspectSupport.class)
-    @ConditionalOnProperty(prefix = "spring.cache", name = "type", havingValue = "redis")
+    @ConditionalOnProperty(prefix = "redisson.spring.cache-manager", name = "enabled", havingValue = "true")
     public RedissonSpringCacheManager redissonSpringCacheManager(RedissonClient redisson) {
         log.info("redisson cache-manager init...");
         RedissonCacheManagerProperties cacheManagerProperties = springProperties.getCacheManager();
@@ -64,8 +64,8 @@ public class RedissonSpringAutoConfiguration {
         Map<String, CacheConfig> config = cacheManagerProperties.getConfigs();
         // 创建 CacheManager，ConfigMap 会转换为 Cache
         RedissonSpringCacheManager cacheManager = new RedissonSpringCacheManager(redisson, config);
-        // RedissonSpringCacheManager 中的 dynamic 属性默认为 true，个人认为这样不合理，会导致滥用缓存
-        // 所以 starter 中 dynamic 的默认值为 false，要求获取的 Cache 必须预先配置，否则会抛出异常
+        // RedissonSpringCacheManager 中的 dynamic 属性默认为 true，即获取不存在的 Cache 时，Redisson 创建一个永不过期的 Cache 以供使用
+        // 个人认为这样不合理，会导致滥用缓存，所以 starter 中 dynamic 的默认值为 false，当获取不存在的 Cache 时会抛出异常
         // 当然，你也可以手动开启 dynamic 功能
         if (!cacheManagerProperties.isDynamic()) {
             cacheManager.setCacheNames(cacheManagerProperties.getConfigs().keySet());
