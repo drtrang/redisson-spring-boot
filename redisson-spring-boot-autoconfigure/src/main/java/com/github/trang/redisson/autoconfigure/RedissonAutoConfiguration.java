@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Configuration
 @ConditionalOnClass(Redisson.class)
-@ConditionalOnProperty(prefix = "spring.redisson", name = "type")
+@ConditionalOnProperty(prefix = "redisson", name = "type")
 @AutoConfigureBefore(CacheAutoConfiguration.class)
 @EnableConfigurationProperties(RedissonProperties.class)
 @Slf4j

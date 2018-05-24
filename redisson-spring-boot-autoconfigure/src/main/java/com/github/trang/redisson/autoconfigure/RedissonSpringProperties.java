@@ -31,6 +31,8 @@ public class RedissonSpringProperties {
     @Getter
     @Setter
     public static class RedissonCacheManagerProperties {
+        /** 是否开启 RedissonSpringCacheManager，默认值：true */
+        private boolean enabled = true;
         /** 是否缓存 null 值，默认值：true */
         private boolean allowNullValues = true;
         /** 序列化类型 */
