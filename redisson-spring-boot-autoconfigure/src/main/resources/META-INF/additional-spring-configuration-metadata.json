@@ -1,7 +1,7 @@
 {
   "hints": [
     {
-      "name": "spring.redisson.reference-codec-provider",
+      "name": "redisson.reference-codec-provider",
       "providers": [
         {
           "name": "class-reference",
@@ -12,7 +12,7 @@
       ]
     },
     {
-      "name": "spring.redisson.executor",
+      "name": "redisson.executor",
       "providers": [
         {
           "name": "class-reference",
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "name": "spring.redisson.event-loop-group",
+      "name": "redisson.event-loop-group",
       "providers": [
         {
           "name": "class-reference",
