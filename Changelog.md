@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.2
+1. 修复：配置路径不正确
+1. 更改：更新 parent 版本为 1.2.2
+2. 更改：Redisson Spring 的配置前缀更改为 `spring.redisson`
+3. 更改：RedissonTransactionManager 默认更改为关闭
+
 ## 1.2.0
 1. 更改：更新 parent 版本为 1.2.0
 2. 更改：更新 Redisson 版本为 3.7.0，跟进最新的配置方法

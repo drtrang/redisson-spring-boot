@@ -16,6 +16,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,16 +33,16 @@ import java.util.List;
 public class RedissonAutoConfiguration {
 
     private RedissonProperties redissonProperties;
-    private List<Customizer<Config>> customizers;
+    private List<Customizer<Config>> redissonCustomizers;
 
     public RedissonAutoConfiguration(RedissonProperties redissonProperties,
-                                     ObjectProvider<List<Customizer<Config>>> customizers) {
+                                     ObjectProvider<List<Customizer<Config>>> customizersProvider) {
         this.redissonProperties = redissonProperties;
-        this.customizers = customizers.getIfAvailable();
+        this.redissonCustomizers = customizersProvider.getIfAvailable(ArrayList::new);
     }
 
     @Bean(destroyMethod = "shutdown")
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(RedissonClient.class)
     public RedissonClient redisson() {
         log.debug("redisson-client init...");
         Config config = new Config();
@@ -65,11 +66,8 @@ public class RedissonAutoConfiguration {
             default:
                 throw new IllegalArgumentException("illegal redisson type: " + redissonProperties.getType());
         }
-        if (customizers != null && !customizers.isEmpty()) {
-            for (Customizer<Config> customizer : customizers) {
-                customizer.customize(config);
-            }
-        }
+        // 用户自定义配置，拥有最高优先级
+        redissonCustomizers.forEach(customizer -> customizer.customize(config));
         return Redisson.create(config);
     }
 

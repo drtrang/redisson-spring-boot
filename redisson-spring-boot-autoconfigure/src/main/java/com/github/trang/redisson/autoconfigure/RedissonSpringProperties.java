@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * RedissonSpring 自动配置属性
+ * Redisson Spring 自动配置属性
  *
  * @author trang
  */
-@ConfigurationProperties(prefix = "redisson.spring")
+@ConfigurationProperties(prefix = "spring.redisson")
 @Getter
 @Setter
 public class RedissonSpringProperties {
@@ -50,8 +50,8 @@ public class RedissonSpringProperties {
     @Getter
     @Setter
     public static class RedissonTransactionManagerProperties {
-        /** 是否开启 RedissonTransactionManager，默认值：true */
-        private boolean enabled = true;
+        /** 是否开启 RedissonTransactionManager，默认值：false */
+        private boolean enabled = false;
     }
 
 }
