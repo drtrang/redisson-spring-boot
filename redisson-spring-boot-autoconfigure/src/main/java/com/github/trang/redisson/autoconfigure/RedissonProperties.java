@@ -1,12 +1,8 @@
 package com.github.trang.redisson.autoconfigure;
 
-import com.github.trang.redisson.autoconfigure.enums.AddressResolverGroupFactoryType;
-import com.github.trang.redisson.autoconfigure.enums.CodecType;
-import com.github.trang.redisson.autoconfigure.enums.LoadBalancerType;
-import com.github.trang.redisson.autoconfigure.enums.RedissonType;
-import io.netty.channel.EventLoopGroup;
-import lombok.Getter;
-import lombok.Setter;
+import java.net.URI;
+import java.util.concurrent.ExecutorService;
+
 import org.redisson.codec.DefaultReferenceCodecProvider;
 import org.redisson.codec.ReferenceCodecProvider;
 import org.redisson.config.ReadMode;
@@ -16,8 +12,14 @@ import org.redisson.config.TransportMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-import java.net.URI;
-import java.util.concurrent.ExecutorService;
+import com.github.trang.redisson.autoconfigure.enums.AddressResolverGroupFactoryType;
+import com.github.trang.redisson.autoconfigure.enums.CodecType;
+import com.github.trang.redisson.autoconfigure.enums.LoadBalancerType;
+import com.github.trang.redisson.autoconfigure.enums.RedissonType;
+
+import io.netty.channel.EventLoopGroup;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Redisson 自动配置属性

@@ -3,7 +3,15 @@ package com.github.trang.redisson.autoconfigure.enums;
 import org.redisson.client.codec.ByteArrayCodec;
 import org.redisson.client.codec.Codec;
 import org.redisson.client.codec.StringCodec;
-import org.redisson.codec.*;
+import org.redisson.codec.CborJacksonCodec;
+import org.redisson.codec.FstCodec;
+import org.redisson.codec.JsonJacksonCodec;
+import org.redisson.codec.KryoCodec;
+import org.redisson.codec.LZ4Codec;
+import org.redisson.codec.MsgPackJacksonCodec;
+import org.redisson.codec.SerializationCodec;
+import org.redisson.codec.SmileJacksonCodec;
+import org.redisson.codec.SnappyCodec;
 
 /**
  * 序列化方式

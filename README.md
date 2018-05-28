@@ -10,8 +10,6 @@ Redisson Spring Boot Starter 将帮助你在 Spring Boot 中使用 Redisson，�
 ## 依赖
 ```xml
 <!-- spring boot 1.x -->
-<<<<<<< HEAD
-=======
 <dependency>
     <groupId>com.github.drtrang</groupId>
     <artifactId>redisson-spring-boot-starter</artifactId>
@@ -19,34 +17,9 @@ Redisson Spring Boot Starter 将帮助你在 Spring Boot 中使用 Redisson，�
 </dependency>
 
 <!-- spring boot 2.x -->
->>>>>>> 1.2.0
-<dependency>
-    <groupId>com.github.drtrang</groupId>
-<<<<<<< HEAD
-    <artifactId>redisson-spring-boot-starter</artifactId>
-    <version>1.2.1</version>
-=======
-    <artifactId>redisson-spring-boot2-starter</artifactId>
-<<<<<<< HEAD
-    <version>1.1.1</version>
->>>>>>> README
-</dependency>
-
-<!-- spring boot 2.x -->
 <dependency>
     <groupId>com.github.drtrang</groupId>
     <artifactId>redisson-spring-boot2-starter</artifactId>
-<<<<<<< HEAD
-    <version>1.2.1</version>
-<<<<<<< HEAD
-</dependency>
-=======
-    <version>1.2.0</version>
-=======
->>>>>>> 1.2.1
-=======
     <version>1.2.2</version>
->>>>>>> replace with lambda
 </dependency>
->>>>>>> 1.2.0
 ```

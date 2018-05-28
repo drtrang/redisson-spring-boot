@@ -1,8 +1,8 @@
 package com.github.trang.redisson.autoconfigure;
 
-import com.github.trang.autoconfigure.Customizer;
-import com.github.trang.redisson.autoconfigure.RedissonSpringProperties.RedissonCacheManagerProperties;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Map;
+
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.spring.cache.CacheConfig;
@@ -27,9 +27,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.github.trang.autoconfigure.Customizer;
+import com.github.trang.redisson.autoconfigure.RedissonSpringProperties.RedissonCacheManagerProperties;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Redisson Spring 自动配置
@@ -50,7 +51,7 @@ public class RedissonSpringAutoConfiguration {
     public RedissonSpringAutoConfiguration(RedissonSpringProperties redissonSpringProperties,
                                            ObjectProvider<List<Customizer<RedissonSpringCacheManager>>> customizersProvider) {
         this.redissonSpringProperties = redissonSpringProperties;
-        this.redissonSpringCacheManagerCustomizers = customizersProvider.getIfAvailable(ArrayList::new);
+        this.redissonSpringCacheManagerCustomizers = customizersProvider.getIfAvailable();
     }
 
     /**

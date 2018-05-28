@@ -1,1 +1,1 @@
-provides: redisson,redisson-spring-boot2-autoconfigure,spring-boot2-autoconfigure
+provides: redisson,redisson-spring-boot-autoconfigure,spring-boot-autoconfigure
