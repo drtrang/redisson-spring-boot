@@ -1,6 +1,9 @@
 package com.github.trang.redisson.autoconfigure;
 
+import static java.util.Collections.emptyList;
+
 import java.util.List;
+import java.util.Optional;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -41,9 +44,9 @@ public class RedissonAutoConfiguration {
     private List<Customizer<Config>> redissonCustomizers;
 
     public RedissonAutoConfiguration(RedissonProperties redissonProperties,
-                                     ObjectProvider<List<Customizer<Config>>> customizersProvider) {
+                                     ObjectProvider<Optional<List<Customizer<Config>>>> customizersProvider) {
         this.redissonProperties = redissonProperties;
-        this.redissonCustomizers = customizersProvider.getIfAvailable();
+        this.redissonCustomizers = customizersProvider.getIfAvailable().orElse(emptyList());
     }
 
     @Bean(destroyMethod = "shutdown")
