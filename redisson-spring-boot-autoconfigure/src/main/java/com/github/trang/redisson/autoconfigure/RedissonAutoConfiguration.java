@@ -1,8 +1,10 @@
 package com.github.trang.redisson.autoconfigure;
 
-import com.github.trang.autoconfigure.Customizer;
-import com.github.trang.redisson.autoconfigure.RedissonProperties.*;
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Collections.emptyList;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -16,8 +18,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.github.trang.autoconfigure.Customizer;
+import com.github.trang.redisson.autoconfigure.RedissonProperties.ClusterServersConfig;
+import com.github.trang.redisson.autoconfigure.RedissonProperties.MasterSlaveServersConfig;
+import com.github.trang.redisson.autoconfigure.RedissonProperties.ReplicatedServersConfig;
+import com.github.trang.redisson.autoconfigure.RedissonProperties.SentinelServersConfig;
+import com.github.trang.redisson.autoconfigure.RedissonProperties.SingleServerConfig;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Redisson 自动配置
@@ -36,9 +44,9 @@ public class RedissonAutoConfiguration {
     private List<Customizer<Config>> redissonCustomizers;
 
     public RedissonAutoConfiguration(RedissonProperties redissonProperties,
-                                     ObjectProvider<List<Customizer<Config>>> customizersProvider) {
+                                     ObjectProvider<Optional<List<Customizer<Config>>>> customizersProvider) {
         this.redissonProperties = redissonProperties;
-        this.redissonCustomizers = customizersProvider.getIfAvailable(ArrayList::new);
+        this.redissonCustomizers = customizersProvider.getIfAvailable().orElse(emptyList());
     }
 
     @Bean(destroyMethod = "shutdown")

@@ -1,8 +1,11 @@
 package com.github.trang.redisson.autoconfigure;
 
-import com.github.trang.autoconfigure.Customizer;
-import com.github.trang.redisson.autoconfigure.RedissonSpringProperties.RedissonCacheManagerProperties;
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Collections.emptyList;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.spring.cache.CacheConfig;
@@ -27,9 +30,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.github.trang.autoconfigure.Customizer;
+import com.github.trang.redisson.autoconfigure.RedissonSpringProperties.RedissonCacheManagerProperties;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Redisson Spring 自动配置
@@ -39,7 +43,7 @@ import java.util.Map;
 @Configuration
 @ConditionalOnClass(Redisson.class)
 @ConditionalOnBean(RedissonClient.class)
-@AutoConfigureAfter({ CacheAutoConfiguration.class, TransactionAutoConfiguration.class })
+@AutoConfigureAfter({CacheAutoConfiguration.class, TransactionAutoConfiguration.class})
 @EnableConfigurationProperties(RedissonSpringProperties.class)
 @Slf4j
 public class RedissonSpringAutoConfiguration {
@@ -48,9 +52,9 @@ public class RedissonSpringAutoConfiguration {
     private List<Customizer<RedissonSpringCacheManager>> redissonSpringCacheManagerCustomizers;
 
     public RedissonSpringAutoConfiguration(RedissonSpringProperties redissonSpringProperties,
-                                           ObjectProvider<List<Customizer<RedissonSpringCacheManager>>> customizersProvider) {
+                                           ObjectProvider<Optional<List<Customizer<RedissonSpringCacheManager>>>> customizersProvider) {
         this.redissonSpringProperties = redissonSpringProperties;
-        this.redissonSpringCacheManagerCustomizers = customizersProvider.getIfAvailable(ArrayList::new);
+        this.redissonSpringCacheManagerCustomizers = customizersProvider.getIfAvailable().orElse(emptyList());
     }
 
     /**
@@ -105,7 +109,9 @@ public class RedissonSpringAutoConfiguration {
      *
      * 1. 因为上面已经有 RedissonSpringCacheManager 了，所以这里有 @Primary 修饰
      * 2. 注入 RedissonSpringCacheManager 而不是 CacheManager 是因为该方法只为 RedissonSpringCacheManager 服务 :)
-     * 3. 有一点原因待查，@ConditionalOnBean 的条件为 'value=RedissonSpringCacheManager.class' 时并不能生效，只能用现在的条件代替了
+     * 3. 当声明 RedissonSpringCacheManager 的 beanName 为 'cacheManager' 时，@ConditionalOnBean 的条件
+     * 'value=RedissonSpringCacheManager.class' 并不能生效，但是别的 beanName 是没问题的，具体原因待查。
+     * 另外根据实验得出 spring-boot 1.x 中各条件之间是或的关系，而 spring boot 2.x 中是且的关系。
      *
      * @return CompositeCacheManager cacheManager
      */
@@ -113,7 +119,8 @@ public class RedissonSpringAutoConfiguration {
     @Primary
     @ConditionalOnBean(name = "cacheManager")
     @ConditionalOnMissingBean(CompositeCacheManager.class)
-    @ConditionalOnProperty(prefix = "spring.redisson.cache-manager", name = "fallback-to-no-op-cache", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "spring.redisson.cache-manager", name = {"enabled", "fallback-to-no-op-cache"},
+            havingValue = "true", matchIfMissing = true)
     public CompositeCacheManager compositeCacheManager(RedissonSpringCacheManager cacheManager) {
         log.info("composite cache-manager init...");
         CompositeCacheManager compositeCacheManager = new CompositeCacheManager(cacheManager);

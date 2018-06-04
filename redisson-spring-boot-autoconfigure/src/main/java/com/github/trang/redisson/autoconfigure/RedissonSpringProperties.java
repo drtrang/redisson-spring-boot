@@ -1,14 +1,16 @@
 package com.github.trang.redisson.autoconfigure;
 
-import com.github.trang.redisson.autoconfigure.enums.CodecType;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.redisson.spring.cache.CacheConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.github.trang.redisson.autoconfigure.enums.CodecType;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Redisson Spring 自动配置属性
