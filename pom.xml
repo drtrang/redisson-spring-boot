@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>redisson-spring-boot</artifactId>
-    <version>1.2.3-SNAPSHOT</version>
+    <version>1.2.3</version>
     <packaging>pom</packaging>
 
     <name>redisson-spring-boot</name>
@@ -53,6 +53,10 @@
         <module>redisson-spring-boot-autoconfigure</module>
         <module>redisson-spring-boot-starter</module>
     </modules>
+
+    <properties>
+        <redisson.version>3.7.1</redisson.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>

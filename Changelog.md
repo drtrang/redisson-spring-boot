@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3
+1. 修复：当 `spring.redisson.cache-manager.enabled=false` 但 `spring.redisson.cache-manager.fallback-to-no-op-cache.enabled=true` 时的启动异常 
+2. 更改：更新 Redisson 版本为 3.7.1
+
 ## 1.2.2.2
 1. 修复：注入 Customizer 为空的 NPE
 
