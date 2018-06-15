@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.github.drtrang</groupId>
         <artifactId>parent</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
     </parent>
 
     <artifactId>redisson-spring-boot</artifactId>
-    <version>1.2.4-SNAPSHOT</version>
+    <version>1.2.4</version>
     <packaging>pom</packaging>
 
     <name>redisson-spring-boot</name>
@@ -55,7 +55,7 @@
     </modules>
 
     <properties>
-        <redisson.version>3.7.1</redisson.version>
+        <redisson.version>3.7.2</redisson.version>
     </properties>
 
     <dependencyManagement>
