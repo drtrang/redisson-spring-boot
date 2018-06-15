@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.4 
+1. 更改：更新 parent 版本为 1.2.3
+2. 更改：更新 Spring Boot 版本为 2.0.3.RELEASE
+3. 更改：更新 Redisson 版本为 3.7.2
+
 ## 1.2.3
 1. 修复：当 `spring.redisson.cache-manager.enabled=false` 但 `spring.redisson.cache-manager.fallback-to-no-op-cache.enabled=true` 时的启动异常 
 2. 更改：更新 Redisson 版本为 3.7.1
