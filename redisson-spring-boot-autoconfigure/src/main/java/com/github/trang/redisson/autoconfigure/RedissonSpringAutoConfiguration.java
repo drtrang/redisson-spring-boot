@@ -1,10 +1,8 @@
 package com.github.trang.redisson.autoconfigure;
 
-import static java.util.Collections.emptyList;
-
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -52,9 +50,9 @@ public class RedissonSpringAutoConfiguration {
     private List<Customizer<RedissonSpringCacheManager>> redissonSpringCacheManagerCustomizers;
 
     public RedissonSpringAutoConfiguration(RedissonSpringProperties redissonSpringProperties,
-                                           ObjectProvider<Optional<List<Customizer<RedissonSpringCacheManager>>>> customizersProvider) {
+                                           ObjectProvider<List<Customizer<RedissonSpringCacheManager>>> customizersProvider) {
         this.redissonSpringProperties = redissonSpringProperties;
-        this.redissonSpringCacheManagerCustomizers = customizersProvider.getIfAvailable().orElse(emptyList());
+        this.redissonSpringCacheManagerCustomizers = customizersProvider.getIfAvailable(Collections::emptyList);
     }
 
     /**
