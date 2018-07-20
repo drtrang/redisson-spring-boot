@@ -1,9 +1,13 @@
 package com.github.trang.redisson.autoconfigure;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toSet;
+import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.match;
+import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.noMatch;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -11,19 +15,27 @@ import org.redisson.config.Config;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionMessage;
+import org.springframework.boot.autoconfigure.condition.ConditionMessage.Style;
+import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 
 import com.github.trang.autoconfigure.Customizer;
+import com.github.trang.redisson.autoconfigure.RedissonAutoConfiguration.RedissonCondition;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.ClusterServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.MasterSlaveServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.ReplicatedServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.SentinelServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.SingleServerConfig;
+import com.github.trang.redisson.autoconfigure.enums.RedissonType;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Configuration
 @ConditionalOnClass(Redisson.class)
-@ConditionalOnProperty(prefix = "redisson", name = "type")
+@Conditional(RedissonCondition.class)
 @AutoConfigureBefore(CacheAutoConfiguration.class)
 @EnableConfigurationProperties(RedissonProperties.class)
 @Slf4j
@@ -44,9 +56,36 @@ public class RedissonAutoConfiguration {
     private List<Customizer<Config>> redissonCustomizers;
 
     public RedissonAutoConfiguration(RedissonProperties redissonProperties,
-                                     ObjectProvider<Optional<List<Customizer<Config>>>> customizersProvider) {
+                                     ObjectProvider<List<Customizer<Config>>> customizersProvider) {
         this.redissonProperties = redissonProperties;
-        this.redissonCustomizers = customizersProvider.getIfAvailable().orElse(emptyList());
+        this.redissonCustomizers = customizersProvider.getIfAvailable();
+        this.redissonCustomizers = redissonCustomizers != null ? redissonCustomizers : emptyList();
+    }
+
+    static class RedissonCondition extends SpringBootCondition {
+        @Override
+        public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
+            String type = context.getEnvironment().getProperty("redisson.type");
+            if (type == null || type.isEmpty() || type.trim().isEmpty()) {
+                type = RedissonType.SINGLE.name();
+            }
+            ConditionMessage.Builder condition = ConditionMessage.forCondition("RedissonCondition",
+                    String.format("(redisson.type=%s)", type));
+            if (type.equalsIgnoreCase(RedissonType.NONE.name())) {
+                return noMatch(condition.found("matched value").items(Style.QUOTE, type));
+            }
+            Set<String> relaxedTypes = Arrays.stream(RedissonType.values())
+                    .filter(t -> t != RedissonType.NONE)
+                    .map(Enum::name)
+                    .map(name -> Arrays.asList(name, name.toLowerCase(), name.toUpperCase()))
+                    .flatMap(List::stream)
+                    .collect(toSet());
+            if (relaxedTypes.contains(type)) {
+                return match(condition.found("matched value").items(Style.QUOTE, type));
+            } else {
+                return noMatch(condition.because("has unrecognized value '" + type + "'"));
+            }
+        }
     }
 
     @Bean(destroyMethod = "shutdown")

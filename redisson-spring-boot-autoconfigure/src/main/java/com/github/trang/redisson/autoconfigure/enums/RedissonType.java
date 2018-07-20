@@ -30,6 +30,11 @@ public enum RedissonType {
     /**
      * 云托管模式
      */
-    REPLICATED
+    REPLICATED,
+
+    /**
+     * 禁用 Redisson
+     */
+    NONE
 
 }
