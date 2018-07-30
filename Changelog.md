@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.6
+1. 新增：配置文件的方式创建 RedissonClient
+1. 更改：更新 parent 版本为 1.3.1
+
 ## 1.2.5
 1. 新增：优化 Redisson 的判断逻辑，默认直接用 single 模式创建
 1. 更改：更新 parent 版本为 1.3.0

@@ -33,5 +33,12 @@
         }
       ]
     }
+  ],
+  "properties": [
+    {
+      "name": "redisson.config.location",
+      "type": "org.springframework.core.io.Resource",
+      "description": "loaded from JSON or YAML format."
+    }
   ]
 }

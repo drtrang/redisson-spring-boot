@@ -3,7 +3,10 @@ package com.github.trang.redisson.autoconfigure;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.match;
 import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.noMatch;
+import static org.springframework.util.StringUtils.endsWithIgnoreCase;
+import static org.springframework.util.StringUtils.isEmpty;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 import com.github.trang.autoconfigure.Customizer;
@@ -37,6 +41,7 @@ import com.github.trang.redisson.autoconfigure.RedissonProperties.SentinelServer
 import com.github.trang.redisson.autoconfigure.RedissonProperties.SingleServerConfig;
 import com.github.trang.redisson.autoconfigure.enums.RedissonType;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -91,6 +96,25 @@ public class RedissonAutoConfiguration {
     @ConditionalOnMissingBean(RedissonClient.class)
     public RedissonClient redisson() {
         log.debug("redisson-client init...");
+        Config config = createConfig();
+        // 用户自定义配置，拥有最高优先级
+        redissonCustomizers.forEach(customizer -> customizer.customize(config));
+        return Redisson.create(config);
+    }
+
+    @SneakyThrows(IOException.class)
+    private Config createConfig() {
+        // 如果声明了配置文件，则用配置文件创建 Config
+        String configLocation = redissonProperties.getConfig().getLocation();
+        if (!isEmpty(configLocation)) {
+            log.info("find redisson configuration file:{}", configLocation);
+            if (endsWithIgnoreCase(configLocation, "json")) {
+                return Config.fromJSON(new ClassPathResource(configLocation).getInputStream());
+            } else if (endsWithIgnoreCase(configLocation, "yml") || endsWithIgnoreCase(configLocation, "yaml")) {
+                return Config.fromYAML(new ClassPathResource(configLocation).getInputStream());
+            }
+        }
+        // 否则用 spring-boot 中声明的配置
         Config config = new Config();
         configGlobal(config);
         switch (redissonProperties.getType()) {
@@ -112,9 +136,7 @@ public class RedissonAutoConfiguration {
             default:
                 throw new IllegalArgumentException("illegal redisson type: " + redissonProperties.getType());
         }
-        // 用户自定义配置，拥有最高优先级
-        redissonCustomizers.forEach(customizer -> customizer.customize(config));
-        return Redisson.create(config);
+        return config;
     }
 
     private void configGlobal(Config config) {

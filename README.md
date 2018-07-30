@@ -13,13 +13,13 @@ Redisson Spring Boot Starter 将帮助你在 Spring Boot 中使用 Redisson，�
 <dependency>
     <groupId>com.github.drtrang</groupId>
     <artifactId>redisson-spring-boot-starter</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
 </dependency>
 
 <!-- spring boot 2.x -->
 <dependency>
     <groupId>com.github.drtrang</groupId>
     <artifactId>redisson-spring-boot2-starter</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
 </dependency>
 ```

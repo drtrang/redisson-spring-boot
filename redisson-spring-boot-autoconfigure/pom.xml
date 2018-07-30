@@ -6,12 +6,13 @@
     <parent>
         <groupId>com.github.drtrang</groupId>
         <artifactId>redisson-spring-boot2</artifactId>
-        <version>1.2.5</version>
+        <version>1.2.6</version>
     </parent>
 
     <artifactId>redisson-spring-boot2-autoconfigure</artifactId>
 
     <dependencies>
+        <!-- required -->
         <dependency>
             <groupId>com.github.drtrang</groupId>
             <artifactId>spring-boot2-autoconfigure</artifactId>
@@ -20,6 +21,18 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+        <!--
+            redisson 在 redisson-spring-boot-starter 中是强制依赖，这里声明为 optional 的原因是有些场景会单独依赖 autoconfigure
+            而不是 starter，这时往往更关注于 autoconfigure 中的功能而不是 redisson，所以 redisson 的依赖是可选的。
+
+            业务方使用时直接依赖 redisson-spring-boot-starter 是不会有影响的。
+        -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- optional -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -29,10 +42,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
             <optional>true</optional>
         </dependency>
     </dependencies>

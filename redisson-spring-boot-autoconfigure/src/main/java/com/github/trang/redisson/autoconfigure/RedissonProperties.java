@@ -56,6 +56,9 @@ public class RedissonProperties {
     /** 地址解析器，默认值：DnsAddressResolverGroupFactory */
     private AddressResolverGroupFactoryType addressResolverGroupFactory = AddressResolverGroupFactoryType.DEFAULT;
 
+    /** 基础配置 */
+    @NestedConfigurationProperty
+    private Config config = new Config();
     /** 单节点模式 */
     @NestedConfigurationProperty
     private SingleServerConfig single = new SingleServerConfig();
@@ -71,6 +74,13 @@ public class RedissonProperties {
     /** 云托管模式 */
     @NestedConfigurationProperty
     private ReplicatedServersConfig replicated = new ReplicatedServersConfig();
+
+    @Getter
+    @Setter
+    public static class Config {
+        /** 用文件方式配置 Redisson，如果指定了该文件则不会再用 spring-boot 配置文件中声明的配置 */
+        private String location = null;
+    }
 
     @Getter
     @Setter
