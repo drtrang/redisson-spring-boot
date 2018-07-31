@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.7
+1. 新增：linux 操作系统下优先使用 epoll（前提是 classpath 中包含 EpollEventLoopGroup 类）
+1. 更改：更新 parent 版本为 1.3.2
+
 ## 1.2.6
 1. 新增：配置文件的方式创建 RedissonClient
 1. 更改：更新 parent 版本为 1.3.1

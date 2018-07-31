@@ -43,8 +43,8 @@ public class RedissonProperties {
     private ExecutorService executor;
     /** Redisson 参考功能的配置选项，默认值：true */
     private boolean referenceEnabled = true;
-    /** TransportMode，默认值：NIO */
-    private TransportMode transportMode = TransportMode.NIO;
+    /** TransportMode，默认值：linux: epoll，other: nio */
+    private TransportMode transportMode;
     /** 单独指定一个 EventLoopGroup */
     private EventLoopGroup eventLoopGroup;
     /** 锁监视器的超时时间，默认值：30000 ms */

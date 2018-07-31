@@ -1,16 +1,9 @@
 package com.github.trang.redisson.autoconfigure;
 
-import static java.util.stream.Collectors.toSet;
-import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.match;
-import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.noMatch;
-import static org.springframework.util.StringUtils.endsWithIgnoreCase;
-import static org.springframework.util.StringUtils.isEmpty;
-
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -18,28 +11,23 @@ import org.redisson.config.Config;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionMessage;
-import org.springframework.boot.autoconfigure.condition.ConditionMessage.Style;
-import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.util.StringUtils;
 
 import com.github.trang.autoconfigure.Customizer;
-import com.github.trang.redisson.autoconfigure.RedissonAutoConfiguration.RedissonCondition;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.ClusterServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.MasterSlaveServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.ReplicatedServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.SentinelServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.SingleServerConfig;
-import com.github.trang.redisson.autoconfigure.enums.RedissonType;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @Conditional(RedissonCondition.class)
 @AutoConfigureBefore(CacheAutoConfiguration.class)
 @EnableConfigurationProperties(RedissonProperties.class)
+@Import(RedissonCustomizer.class)
 @Slf4j
 public class RedissonAutoConfiguration {
 
@@ -66,55 +55,31 @@ public class RedissonAutoConfiguration {
         this.redissonCustomizers = customizersProvider.getIfAvailable(Collections::emptyList);
     }
 
-    static class RedissonCondition extends SpringBootCondition {
-        @Override
-        public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            String type = context.getEnvironment().getProperty("redisson.type");
-            if (type == null || type.isEmpty() || type.trim().isEmpty()) {
-                type = RedissonType.SINGLE.name();
-            }
-            ConditionMessage.Builder condition = ConditionMessage.forCondition("RedissonCondition",
-                    String.format("(redisson.type=%s)", type));
-            if (type.equalsIgnoreCase(RedissonType.NONE.name())) {
-                return noMatch(condition.found("matched value").items(Style.QUOTE, type));
-            }
-            Set<String> relaxedTypes = Arrays.stream(RedissonType.values())
-                    .filter(t -> t != RedissonType.NONE)
-                    .map(Enum::name)
-                    .map(name -> Arrays.asList(name, name.toLowerCase(), name.toUpperCase()))
-                    .flatMap(List::stream)
-                    .collect(toSet());
-            if (relaxedTypes.contains(type)) {
-                return match(condition.found("matched value").items(Style.QUOTE, type));
-            } else {
-                return noMatch(condition.because("has unrecognized value '" + type + "'"));
-            }
-        }
-    }
-
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingBean(RedissonClient.class)
     public RedissonClient redisson() {
-        log.debug("redisson-client init...");
+        log.info("redisson-client init...");
         Config config = createConfig();
-        // 用户自定义配置，拥有最高优先级
+        // 定制化配置，拥有最高优先级，会覆盖之前已有的配置
         redissonCustomizers.forEach(customizer -> customizer.customize(config));
         return Redisson.create(config);
     }
 
     @SneakyThrows(IOException.class)
     private Config createConfig() {
-        // 如果声明了配置文件，则用配置文件创建 Config
+        // 如果声明了配置文件，则优先使用配置文件，若有定制化需求，请实现 Customizer<Config>
         String configLocation = redissonProperties.getConfig().getLocation();
-        if (!isEmpty(configLocation)) {
-            log.info("find redisson configuration file:{}", configLocation);
-            if (endsWithIgnoreCase(configLocation, "json")) {
-                return Config.fromJSON(new ClassPathResource(configLocation).getInputStream());
-            } else if (endsWithIgnoreCase(configLocation, "yml") || endsWithIgnoreCase(configLocation, "yaml")) {
-                return Config.fromYAML(new ClassPathResource(configLocation).getInputStream());
+        if (!StringUtils.isEmpty(configLocation)) {
+            PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+            Resource configResource = resourceResolver.getResource(configLocation);
+            log.info("find redisson configuration resource: [{}]", configResource.getFilename());
+            if (StringUtils.endsWithIgnoreCase(configLocation, "json")) {
+                return Config.fromJSON(configResource.getInputStream());
+            } else if (Stream.of("yml", "yaml").anyMatch(ext -> StringUtils.endsWithIgnoreCase(configLocation, ext))) {
+                return Config.fromYAML(configResource.getInputStream());
             }
         }
-        // 否则用 spring-boot 中声明的配置
+        // 没有找到配置文件再用 spring-boot 的方式配置
         Config config = new Config();
         configGlobal(config);
         switch (redissonProperties.getType()) {

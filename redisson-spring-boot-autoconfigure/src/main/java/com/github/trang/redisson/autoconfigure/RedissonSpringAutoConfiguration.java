@@ -97,7 +97,7 @@ public class RedissonSpringAutoConfiguration {
             redissonSpringCacheManager.setConfigLocation(redissonCacheManagerProperties.getConfigLocation());
         }
         redissonSpringCacheManager.setAllowNullValues(redissonCacheManagerProperties.isAllowNullValues());
-        // 用户自定义配置，拥有最高优先级
+        // 定制化配置，拥有最高优先级，会覆盖之前已有的配置
         redissonSpringCacheManagerCustomizers.forEach(customizer -> customizer.customize(redissonSpringCacheManager));
         return redissonSpringCacheManager;
     }
