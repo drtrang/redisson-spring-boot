@@ -5,7 +5,7 @@ package com.github.trang.redisson.autoconfigure.enums;
  *
  * @author trang
  */
-public enum RedissonType {
+public enum RedisType {
 
     /**
      * 单节点模式
@@ -30,11 +30,6 @@ public enum RedissonType {
     /**
      * 云托管模式
      */
-    REPLICATED,
-
-    /**
-     * 禁用 Redisson
-     */
-    NONE
+    REPLICATED
 
 }

@@ -10,12 +10,12 @@ import org.redisson.config.SslProvider;
 import org.redisson.config.SubscriptionMode;
 import org.redisson.config.TransportMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import com.github.trang.redisson.autoconfigure.enums.AddressResolverGroupFactoryType;
+import com.github.trang.redisson.autoconfigure.enums.ClientMode;
 import com.github.trang.redisson.autoconfigure.enums.CodecType;
 import com.github.trang.redisson.autoconfigure.enums.LoadBalancerType;
-import com.github.trang.redisson.autoconfigure.enums.RedissonType;
+import com.github.trang.redisson.autoconfigure.enums.RedisType;
 
 import io.netty.channel.EventLoopGroup;
 import lombok.Getter;
@@ -31,6 +31,8 @@ import lombok.Setter;
 @Setter
 public class RedissonProperties {
 
+    /** 客户端模式，默认值：default */
+    private ClientMode clientMode = ClientMode.DEFAULT;
     /** 线程池数量，默认值：当前处理核数量*2 */
     private int threads = 0;
     /** Netty 线程池数量，默认值：当前处理核数量*2 */
@@ -52,27 +54,21 @@ public class RedissonProperties {
     /** 是否顺序处理或并发处理 PubSub 消息，默认值：true */
     private boolean keepPubSubOrder = true;
     /** Redis 服务端模式，默认值：single */
-    private RedissonType type = RedissonType.SINGLE;
+    private RedisType type = RedisType.SINGLE;
     /** 地址解析器，默认值：DnsAddressResolverGroupFactory */
     private AddressResolverGroupFactoryType addressResolverGroupFactory = AddressResolverGroupFactoryType.DEFAULT;
 
     /** 基础配置 */
-    @NestedConfigurationProperty
     private Config config = new Config();
     /** 单节点模式 */
-    @NestedConfigurationProperty
     private SingleServerConfig single = new SingleServerConfig();
     /** 集群模式 */
-    @NestedConfigurationProperty
     private ClusterServersConfig cluster = new ClusterServersConfig();
     /** 主从模式 */
-    @NestedConfigurationProperty
     private MasterSlaveServersConfig masterSlave = new MasterSlaveServersConfig();
     /** 哨兵模式 */
-    @NestedConfigurationProperty
     private SentinelServersConfig sentinel = new SentinelServersConfig();
     /** 云托管模式 */
-    @NestedConfigurationProperty
     private ReplicatedServersConfig replicated = new ReplicatedServersConfig();
 
     @Getter

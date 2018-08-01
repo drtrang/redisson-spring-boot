@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.redisson.api.RedissonReactiveClient;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -14,15 +15,20 @@ import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.util.StringUtils;
 
 import com.github.trang.autoconfigure.Customizer;
+import com.github.trang.redisson.autoconfigure.RedissonConditions.RedissonClientCondition;
+import com.github.trang.redisson.autoconfigure.RedissonConditions.RedissonCondition;
+import com.github.trang.redisson.autoconfigure.RedissonConditions.RedissonReactiveClientCondition;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.ClusterServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.MasterSlaveServersConfig;
 import com.github.trang.redisson.autoconfigure.RedissonProperties.ReplicatedServersConfig;
@@ -44,10 +50,11 @@ import lombok.extern.slf4j.Slf4j;
 @EnableConfigurationProperties(RedissonProperties.class)
 @Import(RedissonCustomizer.class)
 @Slf4j
-public class RedissonAutoConfiguration {
+public class RedissonAutoConfiguration implements ResourceLoaderAware {
 
-    private RedissonProperties redissonProperties;
-    private List<Customizer<Config>> redissonCustomizers;
+    private final RedissonProperties redissonProperties;
+    private final List<Customizer<Config>> redissonCustomizers;
+    private ResourceLoader resourceLoader;
 
     public RedissonAutoConfiguration(RedissonProperties redissonProperties,
                                      ObjectProvider<List<Customizer<Config>>> customizersProvider) {
@@ -56,30 +63,49 @@ public class RedissonAutoConfiguration {
     }
 
     @Bean(destroyMethod = "shutdown")
+    @Conditional(RedissonClientCondition.class)
     @ConditionalOnMissingBean(RedissonClient.class)
-    public RedissonClient redisson() {
-        log.info("redisson-client init...");
-        Config config = createConfig();
+    public RedissonClient redisson(Config redissonConfig) {
+        logger.info("redisson-client init...");
+        return Redisson.create(redissonConfig);
+    }
+
+    @Bean(destroyMethod = "shutdown")
+    @Conditional(RedissonReactiveClientCondition.class)
+    @ConditionalOnMissingBean(RedissonReactiveClient.class)
+    public RedissonReactiveClient reactiveRedisson(Config redissonConfig) {
+        logger.info("redisson-reactive-client init...");
+        return Redisson.createReactive(redissonConfig);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(Config.class)
+    public Config redissonConfig() {
+        // 如果声明了配置文件，则优先使用配置文件，没有找到配置文件再用 spring-boot 的方式配置
+        // 若有定制化需求，请实现 Customizer<Config>
+        Config temp = createConfigFromResource();
+        Config config = temp != null ? temp : createConfigFromSpring();
         // 定制化配置，拥有最高优先级，会覆盖之前已有的配置
         redissonCustomizers.forEach(customizer -> customizer.customize(config));
-        return Redisson.create(config);
+        return config;
     }
 
     @SneakyThrows(IOException.class)
-    private Config createConfig() {
-        // 如果声明了配置文件，则优先使用配置文件，若有定制化需求，请实现 Customizer<Config>
+    private Config createConfigFromResource() {
         String configLocation = redissonProperties.getConfig().getLocation();
         if (!StringUtils.isEmpty(configLocation)) {
-            PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-            Resource configResource = resourceResolver.getResource(configLocation);
-            log.info("find redisson configuration resource: [{}]", configResource.getFilename());
+            Resource configResource = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResource(configLocation);
+            logger.info("find redisson configuration resource: [{}]", configResource.getFilename());
             if (StringUtils.endsWithIgnoreCase(configLocation, "json")) {
                 return Config.fromJSON(configResource.getInputStream());
             } else if (Stream.of("yml", "yaml").anyMatch(ext -> StringUtils.endsWithIgnoreCase(configLocation, ext))) {
                 return Config.fromYAML(configResource.getInputStream());
             }
         }
-        // 没有找到配置文件再用 spring-boot 的方式配置
+        return null;
+    }
+
+    private Config createConfigFromSpring() {
         Config config = new Config();
         configGlobal(config);
         switch (redissonProperties.getType()) {
@@ -312,6 +338,11 @@ public class RedissonAutoConfiguration {
                 .addNodeAddress(properties.getNodeAddresses())
                 .setScanInterval(properties.getScanInterval())
                 .setDatabase(properties.getDatabase());
+    }
+
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
     }
 
 }

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.redisson.spring.cache.CacheConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import com.github.trang.redisson.autoconfigure.enums.CodecType;
 
@@ -23,11 +22,8 @@ import lombok.Setter;
 public class RedissonSpringProperties {
 
     /** Redisson CacheManager 配置 */
-    @NestedConfigurationProperty
     private RedissonCacheManagerProperties cacheManager = new RedissonCacheManagerProperties();
-
     /** Redisson TransactionManager 配置 */
-    @NestedConfigurationProperty
     private RedissonTransactionManagerProperties transaction = new RedissonTransactionManagerProperties();
 
     @Getter
